@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.project.mapper.BoardMapper">
+
+
+	<!-- 게시판 등록 -->
+	<insert id="enroll">
+		
+		insert into vam_board(bno, title, content, writer) values ('12', #{title}, #{content}, #{writer})
+		
+	</insert>
+	
+	<delete id="delete" parameterType="java.util.Map">
+		delete from vam_board
+		where bno = #{bno}
+	</delete>
+
+  </mapper>
