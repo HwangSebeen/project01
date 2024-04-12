@@ -1,6 +1,7 @@
 package com.project.login.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +19,25 @@ public class LoginServiceImpl implements LoginService{
 	
 	@Override
 	public int login() {
-		System.out.println("impl까지 왔는가");  
-		
-		BoardVO vo = new BoardVO();
-        vo.setBno(0);
-        vo.setTitle("service test3");
-        vo.setContent("service test4");
-        vo.setWriter("service test5");
-        
-        Map<String, Object> map = new HashMap<String, Object>();
-        
-        map.put("bno", "1");
-		
-        System.out.println("map ::: " + map.toString());
-        
-		return commonDao.delete("com.project.mapper.BoardMapper.delete", map);
+		//return commonDao.delete("com.project.mapper.BoardMapper.delete", map);
+		return 0;
+	}
+
+	// 회원가입 저장
+	@Override
+	public int insertUser(Map map) {
+		return commonDao.insert("com.project.mapper.LoginMapper.insertUser", map);
+	}
+
+	// 지점목록 가져오기
+	@Override
+	public List<Map<String,Object>> selectOfficeList(Map map) {
+		return commonDao.selectList("com.project.mapper.LoginMapper.selectOfficeList", map);
+	}
+
+	@Override
+	public Map<String, Object> checkDupUserId(Map<String, Object> inputMap) {
+		return commonDao.selectOne("com.project.mapper.LoginMapper.checkDupUserId", inputMap);
 	}
 
 }

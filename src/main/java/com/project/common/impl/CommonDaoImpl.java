@@ -1,9 +1,9 @@
 package com.project.common.impl;
 
 import java.util.List;
+import java.util.Map;
 
-import javax.annotation.Resource;
-
+import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,14 +17,18 @@ public class CommonDaoImpl implements CommonDao {
 	@Autowired
 	private SqlSessionTemplate template;
 	
+	@Autowired
+	private SqlSession SqlSession;
+	
 	@Override
 	public void setSqlSessionTemplate(SqlSessionTemplate template) {
 		this.template = template;
 	}
 	
 	@Override
-	public Object insert(String queryId, Object parameterObject)
+	public int insert(String queryId, Object parameterObject)
 	{
+		System.err.println("queryId :: " + queryId);
 		return template.insert(queryId, parameterObject);
 	}
 
@@ -41,7 +45,7 @@ public class CommonDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public Object selectOne(String queryId, Object parameterObject)
+	public Map<String, Object> selectOne(String queryId, Object parameterObject)
 	{
 		return template.selectOne(queryId, parameterObject);
 	}
@@ -50,5 +54,10 @@ public class CommonDaoImpl implements CommonDao {
 	public List<?> list(String queryId, Object parameterObject)
 	{
 		return template.selectList(queryId, parameterObject);
+	}
+	
+	public List<Map<String,Object>> selectList(String queryId, Object parameterObject)
+	{
+		return SqlSession.selectList(queryId, parameterObject);
 	}
 }

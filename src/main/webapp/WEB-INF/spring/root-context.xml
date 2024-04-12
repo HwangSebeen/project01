@@ -11,7 +11,7 @@
 	    <!-- <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property> 
 	    <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:orcl"></property> --> 
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
-		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"></property>	    
+		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;"></property>	    
 	    <property name="username" value="project2023_dev"></property>
 	    <property name="password" value="project2023_dev"></property> 
 	</bean> 
