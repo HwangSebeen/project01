@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace = "com.project.mapper.LoginMapper">
+	<insert id="insertUser">
+		MERGE INTO T_USER
+		USING DUAL
+		   ON (USER_ID = #{userId})
+		 WHEN MATCHED THEN
+		      UPDATE
+		         SET USER_PWD = #{userPwd2}
+					, OFFICE_NO = #{officeNo}
+					, USER_NM = #{userNm}
+					, USER_PWD_HINT_CD = '01'
+					, USER_CELL_PHONE_NUM = #{userCellPhone1}||#{userCellPhone2}||#{userCellPhone3}
+					, USER_BRTH = #{userBrth}
+					, USER_GENDER = #{userGender}
+					, USER_ADDR = '('||#{zipcode}||') ' || #{address1} || ' ' || #{address2}
+					, USER_MAIL = #{userEmail}
+					, USER_AUTH_YN = NVL(#{userAuthYn}, 'N')
+					, USER_AUTH_TYP = NVL(#{userAuthTyp}, '03')
+					, DEL_YN = NVL(#{delYn}, 'N')
+					, LST_MODIFY_DTE = SYSDATE
+		 WHEN NOT MATCHED THEN
+		      INSERT (
+	      			  USER_ID
+					, USER_PWD
+					, OFFICE_NO
+					, USER_NM
+					, USER_PWD_HINT_CD
+					, USER_CELL_PHONE_NUM
+					, USER_BRTH
+					, USER_GENDER
+					, USER_ADDR
+					, USER_MAIL
+					, USER_AUTH_YN
+					, USER_AUTH_TYP
+					, USER_LEAVE_YN
+					, DEL_YN
+					, FST_INS_DTE
+					, LST_MODIFY_DTE
+			) VALUES (
+					  #{userId}
+					, #{userPwd2}
+					, #{officeNo}
+					, #{userNm}
+					, '01'
+					, #{userCellPhone1}||#{userCellPhone2}||#{userCellPhone3}
+					, #{userBrth}
+					, #{userGender}
+					, '('||#{zipcode}||') ' || #{address1} || ' ' || #{address2}
+					, #{userEmail}
+					, NVL(#{userAuthYn}, 'N')
+					, NVL(#{userAuthTyp}, '03')
+					, 'N'
+					, 'N'
+					, SYSDATE
+					, SYSDATE
+				  )
+	</insert>
+	
+	<select id="selectOfficeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			OFFICE_NO
+			, OFFICE_KOR_NM AS OFFICE_NM
+		FROM T_OFFICE
+		ORDER BY OFFICE_KOR_NM DESC
+	</select>
+	
+	<select id="checkDupUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT COUNT(*) AS CNT
+		  FROM T_USER
+		WHERE USER_ID = #{userId}
+		 AND DEL_YN = 'N'
+	</select>
+
+  </mapper>
