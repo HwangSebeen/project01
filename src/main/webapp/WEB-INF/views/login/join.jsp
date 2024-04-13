@@ -9,6 +9,7 @@
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
+  <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <style>
 #container {
 	width: 1100px;
@@ -59,7 +60,7 @@ a {
 <script>
 	// 페이지 로드 시 지점 가져오기
 	$(document).ready(function(){
-		alert("44");
+		
 		fn_selectOfficeList();
 	});
 	
@@ -92,10 +93,15 @@ a {
 	
 	// 저장 전 유효성체크
 	function fn_validation(){
-		alert("11");
 		
 		if($('#userId').val() == ""){
 			alert("아이디를 입력하세요.");
+			$('#userId').focus();
+			return false;
+		}
+		
+		if($("#userId").is(":disabled") == false){
+			alert("아이디 중복체크를 해주세요.");
 			$('#userId').focus();
 			return false;
 		}
@@ -112,6 +118,12 @@ a {
 			return false;
 		}
 		
+		if($('#chkPwd').text() == "비밀번호 불일치"){
+			alert("비밀번호가 일치하지 않습니다. 비밀번호를 재입력하세요.");
+			$('#userPwd2').focus();
+			return false;
+		}
+		
 		if($('#userNm').val() == ""){
 			alert("이름을 입력하세요.");
 			$('#userNm').focus();
@@ -122,6 +134,11 @@ a {
 			alert("전화번호를 입력하세요.");
 			$('#userCellPhone1').focus();
 			return false;
+		}
+		
+		if($("#zipcode").val() != "" && $("#address1").val() != ""){
+			alert("상세주소를 입력하세요.");
+			$('#address2').focus();
 		}
 		
 		return true;
@@ -138,7 +155,7 @@ a {
 			data : {"userId":userId},
             success: function (result) {
             	if(Number(result) > 0){
-            		alert("이미 사용중인 아이디입니다.");
+            		alert("이미 사용중인 아이디입니다. 다시 입력해주세요.");
             		$('#userId').val("");
             	} else {
             		alert("사용가능한 아이디입니다.");
@@ -146,9 +163,44 @@ a {
             	}
             },
             error:function(){
-            	alert("444");
+            	alert("[시스템 에러]관리자에게 문의해주세요.");
             }
         });
+	}
+	
+	// 주소검색이벤트
+	function zipCheck(){
+		 new daum.Postcode({
+	            oncomplete: function(data) {
+	                var roadAddr = data.roadAddress; // 도로명 주소 변수
+	                
+	                if(data.roadAddress == ""){
+	                	roadAddr = data.jibunAddress;	// 지번주소
+	                }
+	                
+	                $("#zipcode").val(data.zonecode);
+	                $("#address1").val(roadAddr);
+	                
+	            }
+	        }).open();
+	}
+	
+	function fn_chkPwd(){
+		if($('#userPwd').val() == $('#userPwd2').val()){
+	        $('#chkPwd').text('비밀번호 일치').css('color', 'green');
+	    }else{
+	        $('#chkPwd').text('비밀번호 불일치').css('color', 'red');
+	    }
+	}
+	
+	function fn_focusOutPwd() {
+		if($('#chkPwd').text() == "비밀번호 불일치"){
+			$('#userPwd').attr("disabled", false);
+	        $('#userPwd2').attr("disabled", false);
+		} else {
+			 $('#userPwd').attr("disabled", true);
+		     $('#userPwd2').attr("disabled", true);
+		}
 	}
 </script>
 <title>회원가입</title>
@@ -187,9 +239,9 @@ a {
 							<tr>
 								<td style="width: 110px;"><h5>비밀번호 확인</h5></td>
 								<td class="2">
-									<input onkeyup="fn_chkPwd(this.value);" class="" id="userPwd2" type="password"
+									<input onfocusout="fn_focusOutPwd()" oninput="fn_chkPwd()" class="" id="userPwd2" type="password"
 									name="userPwd2" maxlength="20"	placeholder="비밀번호확인란를 입력하세요.">
-									<span id="chkPwd">비밀번호일치</span>
+									<span id="chkPwd"></span>
 								</td>
 							</tr>
 							<tr>
@@ -250,7 +302,7 @@ a {
 							<tr>
 								<td style="width: 110px;"><h5>우편번호</h5></td>
 								<td><input class="" id="zipcode" type="text"
-									name="zipcode" />
+									name="zipcode" disabled="true"/>
 								<td style="width: 110px;"><button class=""
 										onClick="zipCheck()" type="button">찾기</button></td>
 							</tr>
