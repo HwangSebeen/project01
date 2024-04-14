@@ -7,13 +7,8 @@
 	<title>Home</title>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
-<P>  The time on the server is ${serverTime}. </P>
-<a href="/board/enroll">게시판 등록 </a>
-
-<a href="/login/loginMain">로그인 메인 </a>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>

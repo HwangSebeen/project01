@@ -41,6 +41,18 @@ public class BoardController {
 		
 	}
 	
+	/* 게시판 등록 페이지 접속 */
+	@GetMapping("/noticeMain")
+	public void uiNoticeMainGET() {
+		log.info("게시판 공지사항 페이지 진입");
+	}
+	
+	// 게시판 등록 페이지 이동
+	@GetMapping("/noticeEnrollMain")
+	public void noticeEnrollMainGet() {
+		log.info("게시판 작성등록 진입");
+	}
+	
 	/* 게시판 등록 */
 	@PostMapping("/enroll")
 	public String boardEnrollPOST(BoardVO board, RedirectAttributes rttr) {

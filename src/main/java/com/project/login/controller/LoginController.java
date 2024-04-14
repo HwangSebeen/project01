@@ -36,6 +36,8 @@ public class LoginController {
 	@GetMapping("/loginMain")
 	public void login() {
 		log.info("로그인 진입");
+		
+		System.err.println("로그인");
 	}
 	
 	@PostMapping("/login")
@@ -94,7 +96,7 @@ public class LoginController {
 	// 아이디 중복 체크
 	@RequestMapping("/login/checkDupUserId.do")
 	public String checkDupUserId(@RequestParam("userId") String userId, HttpServletRequest request, HttpServletResponse response){
-		System.err.println("111");
+
 		try {
 			Map<String,Object> inputMap = new HashMap<String,Object>();
 			inputMap.put("userId", userId);
