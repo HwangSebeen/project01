@@ -6,11 +6,55 @@
 
 
 	<!-- 게시판 등록 -->
-	<insert id="enroll">
-		
-		insert into vam_board(bno, title, content, writer) values ('12', #{title}, #{content}, #{writer})
-		
+	<insert id="boardEnroll">
+	MERGE INTO T_BBS
+		USING DUAL
+		   ON (BBS_TYP = #{bbsTyp}
+		   	 AND BBS_NO = #{bbsNo})
+		  WHEN MATCHED THEN
+		      UPDATE
+		         SET BBS_TITLE = #{bbsTitle}
+		         , BBS_CONTENT = #{bbsContent}
+		         , DOC_ID = #{docId}
+		         , BBS_INS_DT = #{bbsInsDte}
+		         , BBS_LST_DT = #{bbsLstDte}
+		         , USER_ID = #{userId}
+		         , DEL_YN = #{delYn}
+		         , FST_INS_DTE = SYSDATE
+		         , LST_MODIFY_DTE = SYSDATE
+		 WHEN NOT MATCHED THEN
+		      INSERT (
+     			  BBS_TYP
+     			  , BBS_NO
+     			  , BBS_TITLE
+     			  , BBS_CONTENT
+     			  , DOC_ID
+     			  , BBS_INS_DT
+     			  , BBS_LST_DT
+     			  , USER_ID
+     			  , DEL_YN
+     			  , FST_INS_DTE
+     			  , LST_MODIFY_DTE
+			) VALUES (
+					  #{bbsTyp}
+					, #{bbsNo}
+					, #{bbsTitle}
+					, #{bbsContent}
+					, NVL(#{docId}, '')
+					, #{bbsInsDte}
+					, #{bbsLstDte}
+					, #{userId}
+					, #{delYn}
+					, SYSDATE
+					, SYSDATE
+				  )
 	</insert>
+	
+	<select id="selectNewBbsNo" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT MAX(BBS_NO) + 1 AS BBS_NO
+		 FROM T_BBS
+		WHERE BBS_TYP = #{bbsTyp}
+	</select>
 	
 	<delete id="delete" parameterType="java.util.Map">
 		delete from vam_board

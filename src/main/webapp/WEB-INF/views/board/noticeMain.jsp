@@ -20,12 +20,12 @@
 }
 
 .notice_title {
-  width: 80%;
+  width: 83%;
   text-align: center;
 }
 
 .dte {
-  width: 20%;
+  width: 25%;
   text-align: center;
 }
 </style>

@@ -1,6 +1,8 @@
 package com.project.service.impl;
 
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,18 @@ public class BoardServiceImpl implements BoardService {
 		
 		commonDao.insert("com.project.mapper.BoardMapper.enroll", board);
 		
+	}
+
+	// 게시판 등록
+	@Override
+	public int boardEnroll(Map<String, Object> param) {
+		return commonDao.insert("com.project.mapper.BoardMapper.boardEnroll", param);
+	}
+
+	// 게시판번호 채번
+	@Override
+	public Map<String, Object> selectNewBbsNo(Map<String, Object> param) {
+		return commonDao.selectOne("com.project.mapper.BoardMapper.selectNewBbsNo", param);
 	}
 
 //	/* 게시판 목록 */

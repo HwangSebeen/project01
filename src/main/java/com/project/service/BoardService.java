@@ -1,12 +1,19 @@
 package com.project.service;
 
 
+import java.util.Map;
+
 import com.project.model.BoardVO;
 
 public interface BoardService {
 
 	/* 게시판 등록 */
 	public void enroll(BoardVO board);
+
+	public int boardEnroll(Map<String, Object> param);
+
+	public Map<String, Object> selectNewBbsNo(Map<String, Object> param);
+
 	
 //	/* 게시판 목록 */
 //	public List<BoardVO> getList();
