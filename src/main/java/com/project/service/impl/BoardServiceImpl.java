@@ -1,6 +1,7 @@
 package com.project.service.impl;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,12 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Map<String, Object> selectNewBbsNo(Map<String, Object> param) {
 		return commonDao.selectOne("com.project.mapper.BoardMapper.selectNewBbsNo", param);
+	}
+
+	// 게시판 목록 조회
+	@Override
+	public List<Map<String, Object>> selectBoardList(Map<String, Object> param) {
+		return commonDao.selectList("com.project.mapper.BoardMapper.selectBoardList", param);
 	}
 
 //	/* 게시판 목록 */

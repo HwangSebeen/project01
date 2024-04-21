@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,11 +54,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td class="no">1</td>
-                  <td class="notice_title">Cell Dataㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</td>
-                  <td class="dte">2024-02-14</td>
-                </tr>
+              	<c:forEach items="${list}" var="list">
+		            <tr>
+		                <td class="no"><c:out value="${list.BBS_NO}"/></td>
+		                <td class="notice_title"><c:out value="${list.BBS_TITLE}"/></td>
+		                <td class="dte"><c:out value="${list.BBS_INS_DT}"/></td>
+		            </tr>
+		        </c:forEach>
               </tbody>
             </table>
           </div>
