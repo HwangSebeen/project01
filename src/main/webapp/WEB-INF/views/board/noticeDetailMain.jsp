@@ -30,7 +30,7 @@
           <div>
               <h3 style="font-size: 24px;">공지사항</h3>
           </div>
-          <hr style="width: 990px;">
+          <hr style="width: 990px;"> 
           <div>
             <label class="bbs_crtr">작성일</label><br>
             <input class="bbs_common" id="datepicker" readonly="readonly" name="BBS_CONTENT" value='<c:out value="${list.BBS_INS_DT}"/>'><br>
