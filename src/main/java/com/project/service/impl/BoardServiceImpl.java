@@ -49,6 +49,12 @@ public class BoardServiceImpl implements BoardService {
 		return commonDao.selectList("com.project.mapper.BoardMapper.selectBoardList", param);
 	}
 
+	// 게시판 게시글 조회
+	@Override
+	public Map<String, Object> selectDetail(Map<String, Object> param) {
+		return commonDao.selectOne("com.project.mapper.BoardMapper.selectDetail", param);
+	}
+
 //	/* 게시판 목록 */
 //	@Override
 //	public List<BoardVO> getList() {
