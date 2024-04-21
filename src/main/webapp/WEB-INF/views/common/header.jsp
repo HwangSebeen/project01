@@ -174,10 +174,10 @@ header {
 	</ul>
 	<ul class="member_nav">
 		<li><a href=""> 
-            <img alt="logo" class="shopping_cart" src="/images/common/shopping-cart.png">
+            <img alt="logo" class="shopping_cart" src="/resources/images/cart.jpg">
 		</a></li>
 		<li><img alt="logo" class="login_icon"
-			src="/images/common/loginIcon.png">
+			src="/resources/images/heart.png">
 			<ul class="member_sub submenu">
 				
                 <li><a href="/login/loginMain">로그인</a></li>
