@@ -62,6 +62,18 @@
 			BBS_TYP
 		  , BBS_NO
 		  , BBS_TITLE
+		  , TO_CHAR(TO_DATE(BBS_INS_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS BBS_INS_DT
+		 FROM T_BBS
+		WHERE BBS_TYP = #{bbsTyp}
+		AND DEL_YN = 'N'
+	</select>
+	
+	<select id="selectDetail" parameterType="java.util.Map" resultType="java.util.Map">
+	/* 게시판 게시글 조회 - selectDetail */
+		SELECT 
+			BBS_TYP
+		  , BBS_NO
+		  , BBS_TITLE
 		  , BBS_CONTENT
 		  , DOC_ID
 		  , TO_CHAR(TO_DATE(BBS_INS_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS BBS_INS_DT
@@ -69,6 +81,7 @@
 		  , USER_ID
 		 FROM T_BBS
 		WHERE BBS_TYP = #{bbsTyp}
+		AND BBS_NO = #{bbsNo}
 		AND DEL_YN = 'N'
 	</select>
 	

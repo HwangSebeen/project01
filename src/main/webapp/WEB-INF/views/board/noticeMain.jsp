@@ -57,7 +57,11 @@
               	<c:forEach items="${list}" var="list">
 		            <tr>
 		                <td class="no"><c:out value="${list.BBS_NO}"/></td>
-		                <td class="notice_title"><c:out value="${list.BBS_TITLE}"/></td>
+		                <td class="notice_title">
+		                	<a class="move" href='/board/noticeDetailMain?no=<c:out value="${list.BBS_NO}"/>'>
+		                		<c:out value="${list.BBS_TITLE}"/>
+		                	</a>
+		                </td>
 		                <td class="dte"><c:out value="${list.BBS_INS_DT}"/></td>
 		            </tr>
 		        </c:forEach>
