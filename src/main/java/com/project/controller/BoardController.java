@@ -1,5 +1,7 @@
 package com.project.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -45,10 +47,22 @@ public class BoardController {
 		
 	}
 	
-	/* 게시판 등록 페이지 접속 */
+	/* 게시판 목록 리스트 조회 */
 	@GetMapping("/noticeMain")
-	public void uiNoticeMainGET() {
-		log.info("게시판 공지사항 페이지 진입");
+	public void uiNoticeMainGET(Model model) {
+		//log.info("게시판 공지사항 페이지 진입");
+		
+		try {	
+			Map<String,Object> param = new HashMap<String,Object>();
+			param.put("bbsTyp", "02");	// 공지사항
+			
+			List<Map<String,Object>> list = service.selectBoardList(param);	// 게시판 조회
+		
+			model.addAttribute("list", list);
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.err.println("에러발생!");
+		}
 	}
 	
 	// 게시판 등록 페이지 이동
@@ -57,13 +71,15 @@ public class BoardController {
 //		log.info("게시판 작성등록 진입");
 //	}
 	
-	// 게시판 리스트 메인페이지 이동
-	@RequestMapping(value = "/noticeEnrollMain", method = RequestMethod.GET)
-	public String selectBoardListMainGet() {
+	// 게시판 등록페이지 이동
+	@GetMapping("/noticeEnrollMain")
+	//@RequestMapping(value = "/noticeEnrollMain", method = RequestMethod.GET)
+	public void selectBoardListMainGet(Model model) {
+		
 		
 		log.info("게시판 작성등록 진입!");
-		return null;
 	}
+	
 	/* 게시판 등록 */
 	@PostMapping("/enroll")
 	public String boardEnrollPOST(BoardVO board, RedirectAttributes rttr) {
@@ -75,14 +91,13 @@ public class BoardController {
 		rttr.addFlashAttribute("result", "enrol success");
 		
 		return "redirect:/board/list";
-		
 	}
 	
+	// 게시판 저장
 	@RequestMapping(value = "/boardEnroll", method = RequestMethod.POST)
 	public String boardEnroll(@RequestParam Map<String,Object> param, RedirectAttributes rttr) {
 		
 		try {
-			
 			Map<String,Object> map = service.selectNewBbsNo(param);
 			param.put("bbsNo", map.get("BBS_NO"));
 			

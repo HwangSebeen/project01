@@ -15,6 +15,9 @@ public interface BoardMapper {
 	// 게시판번호 채번
 	public Map<String,Object> selectNewBbsNo(Map<String,Object> map);
 	
+	// 게시판 목록
+	public Map<String,Object> selectBoardList(Map<String,Object> map);
+	
 //	/* 게시판 목록 */
 //	public List<BoardVO> getList();
 //	
