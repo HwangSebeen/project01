@@ -37,7 +37,6 @@ public class BoardController {
 		
 	}
 	
-	
 	/* 게시판 등록 페이지 접속 */
 	@GetMapping("/enroll")
 	// => @RequestMapping(value="enroll", method=RequestMethod.GET)
@@ -109,5 +108,24 @@ public class BoardController {
 		}
 		
 		return "redirect:/board/noticeMain";
+	}
+	
+	/* 게시판 게시글 조회 */
+	@GetMapping("/noticeDetailMain")
+	public void noticeDetailMainGET(int no, Model model) {
+		
+		try {	
+			Map<String, Object> inputMap = new HashMap<String,Object>();
+			inputMap.put("bbsTyp", "02");
+			inputMap.put("bbsNo", no);
+			
+			Map<String,Object> param = service.selectDetail(inputMap);
+			
+			//model.addAttribute("param", param);
+			model.addAttribute("list", param);
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.err.println("에러발생!");
+		}
 	}
 }

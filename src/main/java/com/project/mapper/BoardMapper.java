@@ -18,6 +18,9 @@ public interface BoardMapper {
 	// 게시판 목록
 	public Map<String,Object> selectBoardList(Map<String,Object> map);
 	
+	// 게시글 조회
+	public Map<String,Object> selectDetail(Map<String,Object> map);
+	
 //	/* 게시판 목록 */
 //	public List<BoardVO> getList();
 //	
