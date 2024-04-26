@@ -29,7 +29,7 @@ import com.project.login.service.LoginService;
 
 @Controller
 @RequestMapping("/login/*")
-public class LoginController {
+public class LoginController { 
 
 	private static final Logger log = LoggerFactory.getLogger(BoardController.class);
 	
