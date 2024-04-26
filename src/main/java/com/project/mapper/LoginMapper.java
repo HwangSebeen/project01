@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface LoginMapper {
-
-	/* 게시판 등록 */
+	
 	public int insertUser(Map param);
 	
 	public List selectOfficeList(Map map);
 	
 	public Map<String, Object> checkDupUserId(Map<String, Object> inputMap);
+	
+	public Map<String, Object> login(Map<String, Object> inputMap);
 	
 //	/* 게시판 목록 */
 //	public List<BoardVO> getList();

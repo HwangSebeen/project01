@@ -22,6 +22,11 @@
 	margin-left : 50px;
 }
 </style>
+<script>
+	function fn_gotoList() {
+		 window.location.href = "/board/noticeMain"; 
+	}
+</script>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <div id="container">
@@ -39,7 +44,7 @@
             <br>
             <label class="bbs_crtr">내용</label><br>
             <div id="classic">
-            	<textarea class="bbs_common" readonly="readonly" rows="" cols="" value='<c:out value="${list.BBS_CONTENT}"/>'></textarea>	
+            	<c:out value="${list.BBS_CONTENT}"/>
             </div>
           </div>
       </div>
