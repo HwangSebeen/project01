@@ -18,9 +18,8 @@ public class LoginServiceImpl implements LoginService{
 	CommonDao commonDao;
 	
 	@Override
-	public int login() {
-		//return commonDao.delete("com.project.mapper.BoardMapper.delete", map);
-		return 0;
+	public Map<String, Object> login(Map<String, Object> inputMap) {
+		return commonDao.selectOne("com.project.mapper.LoginMapper.loginChk", inputMap);
 	}
 
 	// 회원가입 저장

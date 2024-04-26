@@ -5,8 +5,8 @@ import java.util.Map;
 
 public interface LoginService {
 
-	// 테스트
-	int login();
+	// 로그인
+	Map<String, Object> login(Map<String, Object> inputMap);
 	
 	// 회원가입 
 	int insertUser(Map map);

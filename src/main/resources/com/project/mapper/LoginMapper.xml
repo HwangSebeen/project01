@@ -74,5 +74,17 @@
 		WHERE USER_ID = #{userId}
 		 AND DEL_YN = 'N'
 	</select>
+	
+	<select id="loginChk" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			  USER_LEAVE_YN 							AS userLeaveYn
+			, DECODE(USER_ID, #{userId}, 'Y', 'N') 		AS chkId
+			, DECODE(USER_PWD, #{userPwd}, 'Y', 'N') 	AS chkPwd
+			, USER_NM 									AS userNm
+		  FROM T_USER
+		WHERE USER_ID = #{userId}
+		 OR USER_PWD = #{userPwd}
+		 AND DEL_YN = 'N'
+	</select>
 
   </mapper>

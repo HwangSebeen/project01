@@ -8,12 +8,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,29 +37,53 @@ public class LoginController {
 	LoginService loginService;
 	
 	@GetMapping("/loginMain")
-	public void login() {
+	public void login( ) {
 		log.info("로그인 진입");
-		
-		System.err.println("로그인");
 	}
 	
-	@PostMapping("/login")
-	public void goToLogin(){
-		int result = loginService.login();
-		
+	@RequestMapping("/login/login.do")
+	public void goToLogin(@RequestParam Map<String, Object> map, Model model, 
+			HttpServletRequest request, HttpServletResponse response, HttpSession session){
+		Map<String, Object> output = new HashMap<String,Object>(); 
+		try {	
+			Map<String, Object> result = loginService.login(map);
+			
+			if(result == null) {
+				output.put("failYn", "fail");
+			} else {
+				output.put("failYn", "success");
+				output.put("CHKID", result.get("CHKID"));
+				output.put("CHKPWD", result.get("CHKPWD"));
+				output.put("USERLEAVEYN", result.get("USERLEAVEYN"));
+				output.put("USERNM", result.get("USERNM"));
+			}
+			
+			if(output.get("failYn") == "success" && output.get("CHKID") == "Y" && output.get("CHKPWD") == "Y") {
+				session.setAttribute("userId", map.get("userId"));
+				session.setAttribute("userNm", output.get("USERNM"));
+			}
+			
+			JSONObject jsonObject = new JSONObject(output);
+
+			PrintWriter pw;
+			pw = response.getWriter();
+		    pw.print(jsonObject.toString());
+	        pw.flush();
+	        pw.close();
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.err.println("에러발생!");
+		}
 	}
 	
 	@GetMapping("/join")
 	public void join() {
-		log.info("회원가입 진입");
 	}
 	
 	@PostMapping("/join")
 	public ModelAndView goToJoin(@RequestParam Map map, 
 							RedirectAttributes rttr, HttpServletRequest request, HttpServletResponse response, ModelAndView mv){
 
-//		map.put("userAuthYn", "N");
-//		map.put("userAuthTyp", "03");
 		map.put("delYn", "N");
 		int rslt = loginService.insertUser(map);
 		
