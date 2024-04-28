@@ -178,7 +178,11 @@ header {
         </li>
 	</ul>
 	<ul class="member_nav">
-		<%=userNm %> 님(<%=userId %>)
+		<% if(userId == null){%>
+			로그인이 필요합니다.
+		<%}else {%>
+			<%=userNm %> 님(<%=userId %>)
+		<%}%>
 		<li>
 			<a href=""> <img alt="logo" class="shopping_cart" src="/resources/images/cart.jpg"></a>
 		</li>
@@ -190,7 +194,7 @@ header {
                 	<li><a href="/login/join">회원가입</a></li>
 					
 				<%} else if(userId.equals("admin")){%>
-					<li><a href="/member/logout">로그아웃</a></li>
+					<li><a href="/login/logout">로그아웃</a></li>
                     <li><a href="/orderManage/list">관리자페이지</a></li>
 					
 				<%} else {%>

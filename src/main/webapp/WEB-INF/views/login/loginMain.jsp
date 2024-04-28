@@ -26,7 +26,14 @@
 		var id = $('#userId').val();
 		var pwd = $('#userPwd').val();
 		
-		alert( id + pwd);
+		if(id == ""){
+			alert("아이디를 입력하세요.");
+			return false;
+		}
+		if(pwd == ""){
+			alert("비밀번호를 입력하세요.");
+			return false;
+		}
 		
 		$.ajax({
             type: "POST" ,
@@ -36,17 +43,14 @@
             dataType: 'json',
             success: function (data) {
             	if(data.failYn == "fail"){
-            		alert("로그인 정보가 일치하지 않습니다.");
+            		alert("등록된 정보가 없습니다.");
             		window.location.href = "/login/loginMain";
             	} else if(data.failYn == "success" && data.USERLEAVEYN == "Y") {
             		alert("탈퇴된 회원입니다.");
             		window.location.href = "/login/loginMain";
-            	} else if(data.failYn == "success" && data.CHKID == "N"){
-            		alert("아이디 불일치");
+            	} else if((data.failYn == "success") && (data.CHKID == "N" || data.CHKPWD == "N")){
+            		alert("정보가 일치하지 않습니다.");
             		window.location.href = "/login/loginMain";
-            	} else if(data.failYn == "success" && data.CHKPWD == "N") {
-            		alert("비밀번호 불일치");
-            		 window.location.href = "/login/loginMain";
             	} else if(data.failYn == "success" && data.CHKPWD == "Y" && data.CHKID == "Y") {
             		alert("로그인되었습니다.");
             		window.location.href = "/";

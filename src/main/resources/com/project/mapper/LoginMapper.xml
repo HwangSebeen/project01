@@ -83,7 +83,6 @@
 			, USER_NM 									AS userNm
 		  FROM T_USER
 		WHERE USER_ID = #{userId}
-		 OR USER_PWD = #{userPwd}
 		 AND DEL_YN = 'N'
 	</select>
 
