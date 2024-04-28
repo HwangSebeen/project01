@@ -41,6 +41,17 @@ public class LoginController {
 		log.info("로그인 진입");
 	}
 	
+	// 로그아웃
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
+		HttpSession session= request.getSession();
+		session.invalidate();
+		model.addAttribute("msg","로그아웃 되었습니다.");
+		model.addAttribute("url","/");
+//			response.sendRedirect("/");
+		return "/common/redirect";
+	}
+	
 	@RequestMapping("/login/login.do")
 	public void goToLogin(@RequestParam Map<String, Object> map, Model model, 
 			HttpServletRequest request, HttpServletResponse response){
@@ -51,7 +62,6 @@ public class LoginController {
 			if(result == null) {
 				output.put("failYn", "fail");
 			} else {
-				System.err.println("1332432432");
 				output.put("failYn", "success");
 				output.put("CHKID", result.get("CHKID"));
 				output.put("CHKPWD", result.get("CHKPWD"));
