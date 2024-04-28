@@ -49,7 +49,7 @@
             		 window.location.href = "/login/loginMain";
             	} else if(data.failYn == "success" && data.CHKPWD == "Y" && data.CHKID == "Y") {
             		alert("로그인되었습니다.");
-           		 	window.location.href = "/";
+            		window.location.href = "/";
             	}
             },
             error: function (request, status, error) {
@@ -59,13 +59,6 @@
             }
         });
 	}
-	
-// 	function fn_login(){
-// 		$("#frm").attr('action', "<c:url value = 'login/login'/>");
-// 		$("#frm").attr('method', "post");
-		
-// 		$("#frm").submit();
-// 	}
 </script>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
