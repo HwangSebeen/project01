@@ -43,7 +43,7 @@ public class LoginController {
 	
 	@RequestMapping("/login/login.do")
 	public void goToLogin(@RequestParam Map<String, Object> map, Model model, 
-			HttpServletRequest request, HttpServletResponse response, HttpSession session){
+			HttpServletRequest request, HttpServletResponse response){
 		Map<String, Object> output = new HashMap<String,Object>(); 
 		try {	
 			Map<String, Object> result = loginService.login(map);
@@ -51,6 +51,7 @@ public class LoginController {
 			if(result == null) {
 				output.put("failYn", "fail");
 			} else {
+				System.err.println("1332432432");
 				output.put("failYn", "success");
 				output.put("CHKID", result.get("CHKID"));
 				output.put("CHKPWD", result.get("CHKPWD"));
@@ -58,9 +59,12 @@ public class LoginController {
 				output.put("USERNM", result.get("USERNM"));
 			}
 			
-			if(output.get("failYn") == "success" && output.get("CHKID") == "Y" && output.get("CHKPWD") == "Y") {
-				session.setAttribute("userId", map.get("userId"));
-				session.setAttribute("userNm", output.get("USERNM"));
+			// 로그인 일치 시 세션 세팅
+			if((String.valueOf(output.get("failYn")) == "success") && (String.valueOf(output.get("CHKID")).equals("Y")) && (String.valueOf(output.get("CHKPWD")).equals("Y"))) { 
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("userId", String.valueOf(map.get("userId")));
+				session.setAttribute("userNm", String.valueOf(output.get("USERNM")));
 			}
 			
 			JSONObject jsonObject = new JSONObject(output);
@@ -70,10 +74,12 @@ public class LoginController {
 		    pw.print(jsonObject.toString());
 	        pw.flush();
 	        pw.close();
+	        
 		} catch (Exception e) {
 			e.getStackTrace();
 			System.err.println("에러발생!");
 		}
+		//return "redirect:/board/noticeMain";
 	}
 	
 	@GetMapping("/join")

@@ -1,3 +1,4 @@
+<%@page import="org.apache.ibatis.reflection.SystemMetaObject"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -156,6 +157,10 @@ header {
 <script>
 </script>
 <header>
+<%
+	String userId = (String)session.getAttribute("userId");
+	String userNm = (String)session.getAttribute("userNm");
+%>
 	<div class="main_logo">
 		<a href="/"> <img alt="logo" src="/resources/images/logo.png" style="width:300px; margine-left:10px;">
 		</a>
@@ -173,26 +178,25 @@ header {
         </li>
 	</ul>
 	<ul class="member_nav">
-		<li><a href=""> 
-            <img alt="logo" class="shopping_cart" src="/resources/images/cart.jpg">
-		</a></li>
-		<li><img alt="logo" class="login_icon"
-			src="/resources/images/heart.png">
+		<%=userNm %> 님(<%=userId %>)
+		<li>
+			<a href=""> <img alt="logo" class="shopping_cart" src="/resources/images/cart.jpg"></a>
+		</li>
+		<li><img alt="logo" class="login_icon" src="/resources/images/heart.png">
 			<ul class="member_sub submenu">
-				
-                <li><a href="/login/loginMain">로그인</a></li>
-                <li><a href="/login/join">회원가입</a></li>
-        
-                    <li><b>Guest</b> <span></span></li>
-                    <li><a href="/member/kakaologout">로그아웃</a></li>
-                
-                    <li><a href="/member/logout">로그아웃</a></li>
-                    <li><a href="/mypage/orderlist">마이페이지</a></li>
-                
-                    <li><a href="/member/logout">로그아웃</a></li>
+				<% if(userId == null){%>
+
+					<li><a href="/login/loginMain">로그인</a></li>
+                	<li><a href="/login/join">회원가입</a></li>
+					
+				<%} else if(userId.equals("admin")){%>
+					<li><a href="/member/logout">로그아웃</a></li>
                     <li><a href="/orderManage/list">관리자페이지</a></li>
 					
-				
+				<%} else {%>
+					<li><a href="/member/logout">로그아웃</a></li>
+                    <li><a href="/mypage/orderlist">마이페이지</a></li>
+				<%}%>
 			</ul></li>
 	</ul>
 </header>
