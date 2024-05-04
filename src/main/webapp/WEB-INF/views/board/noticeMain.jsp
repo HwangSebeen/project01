@@ -3,6 +3,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,6 +37,10 @@
 	}
 </script>
 <body>
+<%
+	String userId = (String)session.getAttribute("userId");
+	String userNm = (String)session.getAttribute("userNm");
+%>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <div id="container">
   <div class="contents">
@@ -69,9 +74,12 @@
             </table>
           </div>
       </div>
-     	<div><!-- button area -->
-     		<button onclick="fn_gotoEnroll()">작성</button>
-     	</div>
+     	<% if(String.valueOf(userId).equals("admin")){%>
+			<div><!-- button area -->
+	     		<button onclick="fn_gotoEnroll()">작성</button>
+	     	</div>
+		<%}%>
+     	
   </div>
 </div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
