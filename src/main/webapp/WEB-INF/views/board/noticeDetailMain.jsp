@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <link href="<%= request.getContextPath() %>/resources/css/common.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://cdn.ckeditor.com/4.19.0/full/ckeditor.js"></script>
 <style>
 .bbs_common {
 	margin-top : 10px;
@@ -31,7 +32,7 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <div id="container">
   <div class="contents">
-      <div class="inner">
+      <div class="inner" style="height:1300px;">
           <div>
               <h3 style="font-size: 24px;">공지사항</h3>
           </div>
@@ -43,14 +44,25 @@
             <input class="bbs_common" name="BBS_TITLE" readonly="readonly" value='<c:out value="${list.BBS_TITLE}"/>' >
             <br>
             <label class="bbs_crtr">내용</label><br>
-            <div id="classic">
-            	<c:out value="${list.BBS_CONTENT}"/>
+            <div id="classic" class="bbs_common">
+            	<textarea id="bbsContent" name="bbsContent"><c:out value="${list.BBS_CONTENT}"/></textarea>
+            	<script type="text/javascript">	// 글쓰기 editor 및 사진 업로드 기능
+					CKEDITOR.replace('bbsContent',
+					{filebrowserUploadUrl : '${pageContext.request.contextPath}/adm/fileupload.do',
+						  width:'900px',
+					      height:'700px',
+					      toolbarCanCollapse : true, 
+						  toolbarStartupExpanded : false
+					});
+				</script>
+            	<div><!-- button area -->
+		     		<button onclick="fn_gotoList()">목록</button>
+		     	</div>
             </div>
           </div>
+          
       </div>
-     	<div><!-- button area -->
-     		<button onclick="fn_gotoList()">목록</button>
-     	</div>
+     	
   </div>
 </div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -13,7 +13,7 @@
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;"></property>	    
 	    <property name="username" value="project2023_dev"></property>
-	    <property name="password" value="project2023_dev"></property> 
+	    <property name="password" value="PROJECT2023_DEV"></property> 
 	</bean> 
 	
 	<bean id="datasource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close"> 
@@ -27,6 +27,13 @@
 	
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- //최대 업로드 가능한 바이트 사이즈( -1로 설정할 경우 언리미티드! 제한없음!) -->
+	    <property name="maxUploadSize" value="52428800" />
+	    <!--  //최대 메모리 설정 바이트 사이즈 -->
+		<property name="maxInMemorySize" value="10485760" />
 	</bean>
 	
 <!-- 	<mybatis-spring:scan base-package="com.project"/> -->

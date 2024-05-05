@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.project.common.service.CommonService;
 import com.project.model.BoardVO;
 import com.project.service.BoardService;
 
@@ -27,6 +31,9 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService service;
+	
+	@Autowired
+	private CommonService commonService;
 	
 	/* 게시판 목록 페이지 접속 */
 	@GetMapping("/list")
@@ -94,13 +101,47 @@ public class BoardController {
 	
 	// 게시판 저장
 	@RequestMapping(value = "/boardEnroll", method = RequestMethod.POST)
-	public String boardEnroll(@RequestParam Map<String,Object> param, RedirectAttributes rttr) {
+	public String boardEnroll(@RequestParam Map<String,Object> param, RedirectAttributes rttr, HttpServletRequest request) {
 		
 		try {
 			Map<String,Object> map = service.selectNewBbsNo(param);
 			param.put("bbsNo", map.get("BBS_NO"));
 			
+			if(String.valueOf(param.get("bbsContent")).indexOf("<img") > -1) {
+				// 파일이 있는걸로 간주
+				HttpSession session = request.getSession();
+				String fileOriginName = (String)session.getAttribute("fileOriginName");
+				String fileExt = (String)session.getAttribute("fileExt");
+				String url = (String)session.getAttribute("url");
+				String fileSaveName = (String)session.getAttribute("fileSaveName");
+				String docId = (String)session.getAttribute("docId");
+				
+				Map<String,Object> fileMap = new HashMap<String,Object>();
+				fileMap.put("fileOriginName", fileOriginName);
+				fileMap.put("fileExt", fileExt);
+				fileMap.put("url", url);
+				fileMap.put("fileSaveName", fileSaveName);
+				fileMap.put("docId", docId);
+				fileMap.put("fileTyp", "notice");
+				fileMap.put("fileSeq", "1");
+				System.out.println("fileMap : " + fileMap);
+				
+				int fileResult = commonService.insertFile(fileMap);
+				
+				param.put("docId", docId);
+				
+				if(fileResult > 0) {
+					session.removeAttribute("fileOriginName");
+					session.removeAttribute("fileExt");
+					session.removeAttribute("url");
+					session.removeAttribute("fileSaveName");
+					session.removeAttribute("docId");
+				}
+			}
+			
 			int result = service.boardEnroll(param);
+			
+			
 			
 		} catch (Exception e) {
 			e.getStackTrace();
