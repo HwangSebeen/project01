@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace = "com.project.mapper.CommonMapper">
+	<insert id="insertFile">
+		MERGE INTO T_ATTC_FILE
+		USING DUAL
+		   ON (DOC_ID = #{docId}
+		   	AND FILE_SEQ = #{fileSeq})
+		 WHEN MATCHED THEN
+		      UPDATE
+		         SET FILE_STOR_PATH	 = #{url}
+					, FILE_EXT	 = #{fileExt}
+					, FILE_NM	 = #{fileOriginName}
+					, FILE_TYP	 = #{fileTyp}
+					, LST_MODIFY_DTE = SYSDATE
+		 WHEN NOT MATCHED THEN
+		      INSERT (
+	      			  DOC_ID
+					, FILE_SEQ
+					, FILE_STOR_PATH
+					, FILE_EXT
+					, FILE_NM
+					, FILE_TYP
+					, DEL_YN	
+					, FST_INS_DTE
+					, LST_MODIFY_DTE
+			) VALUES (
+					  #{docId}
+					, #{fileSeq}
+					, #{url}
+					, #{fileExt}
+					, #{fileOriginName}
+					, #{fileTyp}
+					, 'N'
+					, SYSDATE
+					, SYSDATE
+				  )
+	</insert>
+	
+
+  </mapper>

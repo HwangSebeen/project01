@@ -12,12 +12,13 @@
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/29.1.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.19.0/full/ckeditor.js"></script>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <link href="<%= request.getContextPath() %>/resources/css/common.css" rel="stylesheet">
+
 <style>
 	.ck.ck-editor {
     	max-width: 900px;
@@ -67,7 +68,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
   <div id="container">
 	  <div class="contents">
-	      <div class="inner">
+	      <div class="inner" style="height:1300px;">
 	          <div>
 	              <h3 style="font-size: 24px;">공지사항</h3>
 	          </div>
@@ -87,22 +88,24 @@
 	                <label class="bbs_crtr">제목</label><br>
 	                <input name="bbsTitle" class="bbs_common"><br>
 	                <label class="bbs_crtr">내용</label><br>
-	                <div id="classic">
-<!-- 				        <input type="text" name="bbsContent" id="bbsContent"> -->
+	                <div id="classic" class="bbs_common">
 						<textarea id="bbsContent" name="bbsContent"></textarea>
+						<script>
+							$(function () {
+								CKEDITOR.replace('bbsContent', {
+									filebrowserUploadUrl : '${pageContext.request.contextPath}/adm/fileupload.do',
+									 width:'900px',
+								      height:'700px',
+								});
+							});
+						</script>
+						 <div><!-- button area -->
+			            	<button onclick="fn_save()">저장</button>
+			            	<button onclick="fn_gotoMain()">목록</button>
+			            </div>
 				    </div>
-				    <script>
-				        ClassicEditor
-				            .create( document.querySelector( '#bbsContent' ))
-				            .catch( error => {
-				                console.error( error );
-				            } );
-				    </script>
 	            </form>
-	            <div><!-- button area -->
-	            	<button onclick="fn_save()">저장</button>
-	            	<button onclick="fn_gotoMain()">목록</button>
-	            </div>
+	           
 	         </div>
 	      </div>
 	  </div>
