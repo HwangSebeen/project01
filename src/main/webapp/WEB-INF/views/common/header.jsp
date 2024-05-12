@@ -195,7 +195,7 @@ header {
 					
 				<%} else if(userId.equals("admin")){%>
 					<li><a href="/login/logout">로그아웃</a></li>
-                    <li><a href="/orderManage/list">관리자페이지</a></li>
+                    <li><a href="/admin/adminMain">관리자페이지</a></li>
 					
 				<%} else {%>
 					<li><a href="/member/logout">로그아웃</a></li>

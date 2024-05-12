@@ -37,6 +37,7 @@
     /* height: 100%; */
     border: 1px solid yellow;
 }
+
 a {
     text-decoration: none;
     color: #000;
@@ -49,4 +50,18 @@ a {
 .snb_inner {
     width: 170px;
     margin: 30px auto 0;
+}
+/*관리자 마이페이지 관련*/
+.inner_admin_mypage {
+	 margin-top: 30px;
+    margin-left: 45px;
+    width: 836px;
+    /* height: 100%; */
+    border: 1px solid yellow;
+}
+.contents_admin_mypage {
+	width: 888px;
+    height: 100%;
+    /*2500px -> 100%*/
+    border: 1px solid black;
 }
