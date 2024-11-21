@@ -168,7 +168,7 @@ header {
 	<ul class="menu_nav">
 		<li><a href="">소개</a></li>
 		<li><a href="">SHOP</a></li>
-        <li><a href="">예약</a></li>
+        <li><a href="/reserve/reserveInsertMain">예약</a></li>
 		<li><a class="customer" href="">게시판</a>
 			<ul class="customer_sub submenu">
 				<li><a href="/board/noticeMain">공지사항</a></li>
