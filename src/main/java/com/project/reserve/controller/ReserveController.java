@@ -18,7 +18,7 @@ private static final Logger log = LoggerFactory.getLogger(ReserveController.clas
 	ReserveService reserveService;
 	
 	@GetMapping("/reserveInsertMain")
-	public void login( ) {
+	public void reserveMain( ) {
 		log.info("예약하기 진입");
 	}
 }

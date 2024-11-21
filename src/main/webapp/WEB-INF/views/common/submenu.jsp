@@ -83,6 +83,7 @@
 			<li><a class="ahover" href="/admin/reserveList"><span>예약관리</span></a></li>
 			<li><a class="ahover" href="/admin/prodjectList"><span>상품관리</span></a></li>
 			<li><a class="ahover" href="/manage/reviewList"><span>리뷰관리</span></a></li>
+			<li><a class="ahover" href="/admin/menu/menuMain"><span>메뉴관리</span></a></li>
       <li><a class="ahover" href="/admin/memberList"><span>회원관리</span></a></li>
       <li><a class="ahover" href="/admin/faqList"><span>FAQ관리</span></a></li>
       <li><a class="ahover" href="/admin/qnaList"><span>1:1문의관리</span></a></li>
