@@ -94,7 +94,7 @@ public class BoardController {
 		
 		service.enroll(board);
 		
-		rttr.addFlashAttribute("result", "enrol success");
+		rttr.addFlashAttribute("result", "enroll success");
 		
 		return "redirect:/board/list";
 	}

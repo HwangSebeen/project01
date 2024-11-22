@@ -18,6 +18,32 @@
 function fn_gotoMain() {
 	 window.location.href = "/admin/menu/menuMain"; 
 }
+
+// 저장로직
+function fn_save(){
+	
+	console.log("111");
+	$("#frm_insert").attr('action', "<c:url value = '/admin/menu/menuInsert'/>");
+	$("#frm_insert").attr('method', "post");
+	
+	$("#frm_insert").submit();
+}
+
+// 이미지 미리보기
+function setThumbnail(event){
+	var reader = new FileReader();
+	
+	reader.onload = function(event){
+		var img = document.createElement("img");
+		img.setAttribute("src", event.target.result);
+		img.setAttribute("class", "col-lg-6");
+		img.setAttribute("width", "300px");
+		img.setAttribute("height", "300px");
+		document.querySelector("div#image_container").appendChild(img);
+	};
+	
+	reader.readAsDataURL(event.target.files[0]);
+}
 </script>
 <title>예약하기</title>
 </head>
@@ -30,7 +56,8 @@ function fn_gotoMain() {
             <h3 style="font-size: 24px;">메뉴등록</h3>
         </div>
         <hr style="width: 990px;">
-        <form method="post" id="frm_insert" onsubmit="return fn_validation()" action="">
+<!--         <form id="frm_insert" onsubmit="return fn_validation()" enctype="multipart/form-data"> -->
+         <form id="frm_insert" enctype="multipart/form-data">
             <table class=""
                 style="text-align: center; border: 1px solid #ddddddd">
                 <thead>
@@ -40,13 +67,12 @@ function fn_gotoMain() {
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="width: 110px;"><h5>메뉴이미지</h5></td>
-                        <td>
-                            <div style="border : 1px solid black; width : 50px; height:50px;">
+                        <td style="width: 110px; height:350px;"><h5>메뉴이미지</h5></td>
+                        <td class="2">
+                            <div id="image_container" style="border : 1px solid black; width : 300px; height:300px; ">
                             <!-- 이미지영역 -->
                             </div>
-                            <button onclick="">첨부</button>
-                        <td style="width: 110px;">
+                            <input style="margin-top:10px;" class="form-control form-control-user" type="file" name="menuImg" id="menuImg" onchange="setThumbnail(event);">
                         </td>
                     </tr>
                     <tr>
@@ -66,7 +92,7 @@ function fn_gotoMain() {
                             <h5>카테고리</h5>
                         </td>
                         <td style="text-align: left;">
-                        	<select name="category" id="category"> <!--  공통코드로 관리 -->
+                        	<select name="category" id="category" style="margin-left:65px;"> <!--  공통코드로 관리 -->
                                 <option value="01">음료</option>
                                 <option value="02">디저트</option>
                                 <option value="03">MD</option>
