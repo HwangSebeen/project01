@@ -4,8 +4,55 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.mapper.AdminMenuMapper">
 
+	<select id="selectNewMenuNo" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT MAX(MENU_NO) + 1 AS MENU_NO
+		 FROM T_MENU
+		WHERE MENU_TYP = #{menuTyp}
+	</select>
+	
 	<!-- 게시판 등록 -->
 	<insert id="menuInsert">
-	
+	MERGE INTO T_MENU
+	USING DUAL
+	   ON (MENU_TYP = #{menuTyp}
+	   	 AND MENU_NO = #{menuNo})
+	  WHEN MATCHED THEN
+	      UPDATE
+	         SET CATEGORY = #{category}
+	         , MENU_KOR_NM = #{menuKorNm}
+	         , MENU_ENG_NM = #{menuEngNm}
+	         , DOC_ID = #{docId}
+	         , MENU_DTL = #{menuDtl}
+	         , ORIG_AMT = #{origAmt}
+	         , SALE_AMT = #{saleAmt}
+	         , DEL_YN = #{delYn}
+	         , FST_INS_DTE = SYSDATE
+	         , LST_MODIFY_DTE = SYSDATE
+	 WHEN NOT MATCHED THEN
+	      INSERT (
+	      			CATEGORY
+    			  , MENU_KOR_NM
+				  , MENU_ENG_NM
+				  , DOC_ID
+				  , MENU_DTL
+				  , ORIG_AMT
+				  , SALE_AMT
+				  , DEL_YN
+    			  , FST_INS_DTE
+    			  , LST_MODIFY_DTE
+		) VALUES (
+				  #{menuTyp}
+				, #{menuNo}
+				, #{category}
+				, #{menuKorNm}
+				, #{menuEngNm}
+				, NVL(#{docId}, '')
+				, #{menuDtl}
+				, #{origAmt}
+				, #{saleAmt}
+				, #{delYn}
+				, SYSDATE
+				, SYSDATE
+			  )
 	</insert>
 </mapper>

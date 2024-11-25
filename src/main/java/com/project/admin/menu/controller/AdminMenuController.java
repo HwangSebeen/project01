@@ -1,6 +1,7 @@
 package com.project.admin.menu.controller;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,6 +47,10 @@ public class AdminMenuController {
 			model.addAttribute("url","/");
 			return "/common/redirect";
 		} else {
+			param.put("menuTyp", "01");
+			Map<String,Object> map = adminMenuService.selectNewMenuNo(param);
+			param.put("menuNo", map.get("MENU_NO"));
+			
 			String currentDir = System.getProperty("user.dir");
 			
 			String filePath = currentDir + "\\src\\main\\resources\\webapp\\resources\\images\\menu";
@@ -59,7 +64,18 @@ public class AdminMenuController {
 			  
 			String menuImg = "/images/uploadFiles/menu/" + savedName;
 			
-			param.put("docId", savedName);
+			Map<String,Object> fileMap = new HashMap<String,Object>();
+			
+			fileMap.put("docId", savedName);
+			fileMap.put("originFileName", originFileName);
+			fileMap.put("ext", ext);
+			fileMap.put("savedName", savedName);
+			fileMap.put("menuImg", menuImg);
+			fileMap.put("filePath", filePath);
+			fileMap.put("fileTyp", "menu");
+			fileMap.put("fileSeq", "1");
+			
+			param.put("fileMap", fileMap);
 			
 			//int result = adminMenuService.menuInsert(param);
 			
@@ -68,7 +84,7 @@ public class AdminMenuController {
 			ext : .jpg
 			savedName : 01ced4f4aaa440d2b35145740edc00fa.jpg
 			menuImg : /images/uploadFiles/menu/01ced4f4aaa440d2b35145740edc00fa.jpg
-			filePath : C:\project2023\sts-3.9.18.RELEASE\src\main\resources\webapp\resources\images\uploadFiles\menu
+			filePath : C:\project2023\sts-3.9.18.RELEASE\src\main\resources\ webapp\resources\images\ uploadFiles\menu
 			currentDir : C:\project2023\sts-3.9.18.RELEASE
 			 * 
 			 * */
@@ -78,6 +94,7 @@ public class AdminMenuController {
 			 System.out.println("savedName : " + savedName);
 			 System.out.println("menuImg : " + menuImg);
 			 System.out.println("filePath : " + filePath);
+			 System.out.println("param : " + param);
 			
 			// 첨부파일 테이블에도 저장해야됨
 			
