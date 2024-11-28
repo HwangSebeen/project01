@@ -17,6 +17,13 @@
 }
 </style>
 <script>
+
+	function fn_enterkey() {
+	  if (window.event.keyCode == 13) {
+	       fn_login();
+	  }
+	}
+	
 	function fn_gotoJoin() {
 		 window.location.href = "/login/join";
 	}
@@ -89,7 +96,7 @@
 						</tr>
 						<tr>
 							<td style="width: 110px;"><h5>비밀번호</h5></td>
-							<td><input class="form-control" type="password" id="userPwd"
+							<td><input class="form-control" type="password" id="userPwd" onkeyup="fn_enterkey()"
 								name="userPwd" maxlength="20" placeholder="비밀번호를 입력하세요."></td>
 						</tr>
 				

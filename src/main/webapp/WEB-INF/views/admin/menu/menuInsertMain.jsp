@@ -103,13 +103,13 @@ function setThumbnail(event){
                     <tr>
                         <td style="width: 110px;"><h5>가격</h5></td>
                         <td class="2">
-                            <input class="" id="originPrice" type="number" name="originPrice" maxlength="20" placeholder="가격을 입력하세요.">
+                            <input class="" id="origAmt" type="number" name="origAmt" maxlength="20" placeholder="가격을 입력하세요.">
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 110px;"><h5>판매가격</h5></td>
                         <td class="2">
-                            <input class="" id="salePrice" type="number" name="salePrice" maxlength="20" placeholder="판매가격을 입력하세요.">
+                            <input class="" id="saleAmt" type="number" name="saleAmt" maxlength="20" placeholder="판매가격을 입력하세요.">
                         </td>
                     </tr>
                     <tr>

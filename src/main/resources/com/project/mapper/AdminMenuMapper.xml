@@ -5,7 +5,7 @@
 <mapper namespace="com.project.mapper.AdminMenuMapper">
 
 	<select id="selectNewMenuNo" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT MAX(MENU_NO) + 1 AS MENU_NO
+		SELECT NVL(MAX(MENU_NO),0) + 1 AS MENU_NO
 		 FROM T_MENU
 		WHERE MENU_TYP = #{menuTyp}
 	</select>
@@ -30,7 +30,9 @@
 	         , LST_MODIFY_DTE = SYSDATE
 	 WHEN NOT MATCHED THEN
 	      INSERT (
-	      			CATEGORY
+	      			MENU_TYP
+	      		  , MENU_NO
+	      		  , CATEGORY
     			  , MENU_KOR_NM
 				  , MENU_ENG_NM
 				  , DOC_ID
@@ -50,7 +52,7 @@
 				, #{menuDtl}
 				, #{origAmt}
 				, #{saleAmt}
-				, #{delYn}
+				, 'N'
 				, SYSDATE
 				, SYSDATE
 			  )
