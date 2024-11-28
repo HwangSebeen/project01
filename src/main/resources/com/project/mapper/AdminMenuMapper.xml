@@ -57,4 +57,21 @@
 				, SYSDATE
 			  )
 	</insert>
+	
+	<select id="selectAdminMenuList" parameterType="java.util.Map" resultType="java.util.Map">
+	/* 메뉴 목록 조회 - selectAdminMenuList */
+		SELECT 
+			A.MENU_TYP 
+			, A.MENU_NO 
+			, A.MENU_KOR_NM 
+			, A.MENU_ENG_NM 
+			, A.DOC_ID 
+			, B.FILE_STOR_PATH
+			, F_GET_CMN_CD_DTL_NM('04', A.CATEGORY) AS CATEGORY
+		 FROM T_MENU A
+		   , T_ATTC_FILE B
+		WHERE A.DOC_ID = B.DOC_ID
+		 AND A.DEL_YN = 'N'
+		 AND B.DEL_YN = 'N'
+	</select>
 </mapper>

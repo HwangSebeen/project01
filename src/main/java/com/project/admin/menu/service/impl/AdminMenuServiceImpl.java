@@ -1,6 +1,7 @@
 package com.project.admin.menu.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,12 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 		}
 		
 		return result;
+	}
+
+	// 메뉴 목록 조회
+	@Override
+	public List<Map<String, Object>> selectAdminMenuList(Map<String, Object> param) {
+		return commonDao.selectList("com.project.mapper.AdminMenuMapper.selectAdminMenuList", param);
 	}
 
 	

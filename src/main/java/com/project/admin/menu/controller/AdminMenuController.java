@@ -3,6 +3,7 @@ package com.project.admin.menu.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,8 +32,17 @@ public class AdminMenuController {
 	AdminMenuService adminMenuService;
 	
 	@GetMapping("/menuMain")
-	public void adminMenuMain( ) {
+	public void adminMenuMain(Model model) {
 		log.info("관리자 메뉴관리 진입");
+		try {
+			Map<String,Object> map = new HashMap<String,Object>();
+			
+			List<Map<String,Object>> list = adminMenuService.selectAdminMenuList(map);	// 조회
+			model.addAttribute("list", list);
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.err.println("에러발생!");
+		}
 	}
 	
 	@GetMapping("/menuInsertMain")
@@ -44,9 +54,7 @@ public class AdminMenuController {
 	@RequestMapping(value = "/menuInsert", method = RequestMethod.POST)
 	public String menuInsert(@RequestParam(value ="menuImg", required=false) MultipartFile singleFile, @RequestParam Map<String,Object> param, Model model, RedirectAttributes rttr, HttpServletRequest request) throws IllegalStateException, IOException {
 		if(singleFile.isEmpty()) {
-			model.addAttribute("msg","로그아웃 되었습니다.");
-			model.addAttribute("url","/");
-			return "/common/redirect";
+			model.addAttribute("msg","메뉴 이미지 에러..");
 		} else {
 			param.put("menuTyp", "01");
 			Map<String,Object> map = adminMenuService.selectNewMenuNo(param);
@@ -65,7 +73,8 @@ public class AdminMenuController {
 			String ext = originFileName.substring(originFileName.lastIndexOf("."));
 			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 			  
-			String menuImage = "/images/menu/" + savedName;
+//			String menuImage = "/images/menu/" + savedName;
+			String menuImgPath = "/resources/images/menuImg/" + savedName;
 			
 			singleFile.transferTo(new File(filePath + "\\" + savedName));
 			
@@ -74,7 +83,8 @@ public class AdminMenuController {
 			fileMap.put("docId", savedName);				// 저장파일명
 			fileMap.put("fileOriginName", originFileName);	// 실제파일명
 			fileMap.put("fileExt", ext);
-			fileMap.put("url", filePath);
+//			fileMap.put("url", filePath);
+			fileMap.put("url", menuImgPath);	// 리소스/이미지/메뉴
 			fileMap.put("fileTyp", "menu");
 			fileMap.put("fileSeq", "1");
 			
@@ -85,11 +95,10 @@ public class AdminMenuController {
 			int result = adminMenuService.menuInsert(param);
 			
 			model.addAttribute("msg","메뉴가 등록되었습니다.");
-			model.addAttribute("url","/admin/menu/menuMain");
-			return "/common/redirect";
-			
-			//return "redirect:/admin/menu/menuMain";
 		}
+		
+		model.addAttribute("url","/admin/menu/menuMain");
+		return "/common/redirect";
 		
 	}
 }
