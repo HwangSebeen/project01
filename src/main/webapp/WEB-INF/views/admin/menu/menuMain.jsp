@@ -59,17 +59,22 @@ function fn_gotoEnroll() {
                 </tr>
               </thead>
               <tbody>
-<%--               	<c:forEach items="${list}" var="list"> --%>
+              	<c:forEach items="${list}" var="list">
 		            <tr>
-		                <td class="no">이미지</td>
+		                <td class="no"><img src="${list.FILE_STOR_PATH}" style="width : 300px; height:300px; "></td>
+		                
 		                <td class="notice_title">
-		                	<a class="move" href='/board/noticeDetailMain?no=<c:out value="${list.BBS_NO}"/>'>
-		                		커피카테고리
+		                	<a class="move" href='/admin/menu/menuDetail?no=<c:out value="${list.MENU_NO}"/>'>
+		                		<c:out value="${list.CATEGORY}"/>
 		                	</a>
 		                </td>
-		                <td class="dte">커피1</td>
+		                <td class="dte">
+			                <a class="move" href='/admin/menu/menuDetailMain?no=<c:out value="${list.MENU_NO}"/>'>
+			                	<c:out value="${list.MENU_KOR_NM}"/>
+			                </a>
+		                </td>
 		            </tr>
-<%-- 		        </c:forEach> --%>
+		        </c:forEach>
               </tbody>
             </table>
           </div>

@@ -11,4 +11,7 @@ public interface AdminMenuMapper {
 	
 	// 메뉴번호 채번
 	public Map<String,Object> selectNewMenuNo(Map<String,Object> map);
+	
+	// 메뉴 목록
+	public Map<String,Object> selectAdminMenuList(Map<String,Object> map);
 }
