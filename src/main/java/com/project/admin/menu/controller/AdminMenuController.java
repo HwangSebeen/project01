@@ -1,6 +1,7 @@
 package com.project.admin.menu.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class AdminMenuController {
 	
 	// 게시판 저장
 	@RequestMapping(value = "/menuInsert", method = RequestMethod.POST)
-	public String menuInsert(@RequestParam(value ="menuImg", required=false) MultipartFile singleFile, @RequestParam Map<String,Object> param, Model model, RedirectAttributes rttr, HttpServletRequest request) {
+	public String menuInsert(@RequestParam(value ="menuImg", required=false) MultipartFile singleFile, @RequestParam Map<String,Object> param, Model model, RedirectAttributes rttr, HttpServletRequest request) throws IllegalStateException, IOException {
 		if(singleFile.isEmpty()) {
 			model.addAttribute("msg","로그아웃 되었습니다.");
 			model.addAttribute("url","/");
@@ -51,54 +52,43 @@ public class AdminMenuController {
 			Map<String,Object> map = adminMenuService.selectNewMenuNo(param);
 			param.put("menuNo", map.get("MENU_NO"));
 			
-			String currentDir = System.getProperty("user.dir");
+			//String currentDir = System.getProperty("user.dir");
 			
-			String filePath = currentDir + "\\src\\main\\resources\\webapp\\resources\\images\\menu";
+			//String filePath = currentDir + "\\src\\main\\resources\\webapp\\resources\\images\\menu";
+			String filePath = "C:\\project2023\\workspace\\project2024_git\\src\\main\\webapp\\resources\\images\\menuImg";
 			
-			File mkdir = new File(filePath); if(!mkdir.exists()) mkdir.mkdirs();
+			File mkdir = new File(filePath);
+			if(!mkdir.exists()) mkdir.mkdirs();
 			  
 			String originFileName = singleFile.getOriginalFilename();
 			
 			String ext = originFileName.substring(originFileName.lastIndexOf("."));
 			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 			  
-			String menuImg = "/images/uploadFiles/menu/" + savedName;
+			String menuImage = "/images/menu/" + savedName;
+			
+			singleFile.transferTo(new File(filePath + "\\" + savedName));
 			
 			Map<String,Object> fileMap = new HashMap<String,Object>();
 			
-			fileMap.put("docId", savedName);
-			fileMap.put("originFileName", originFileName);
-			fileMap.put("ext", ext);
-			fileMap.put("savedName", savedName);
-			fileMap.put("menuImg", menuImg);
-			fileMap.put("filePath", filePath);
+			fileMap.put("docId", savedName);				// 저장파일명
+			fileMap.put("fileOriginName", originFileName);	// 실제파일명
+			fileMap.put("fileExt", ext);
+			fileMap.put("url", filePath);
 			fileMap.put("fileTyp", "menu");
 			fileMap.put("fileSeq", "1");
 			
 			param.put("fileMap", fileMap);
+			param.put("docId", savedName);
+			param.put("delYn", 'N');
 			
-			//int result = adminMenuService.menuInsert(param);
+			int result = adminMenuService.menuInsert(param);
 			
-			/*
-			 *originFileName : me_picture.jpg
-			ext : .jpg
-			savedName : 01ced4f4aaa440d2b35145740edc00fa.jpg
-			menuImg : /images/uploadFiles/menu/01ced4f4aaa440d2b35145740edc00fa.jpg
-			filePath : C:\project2023\sts-3.9.18.RELEASE\src\main\resources\ webapp\resources\images\ uploadFiles\menu
-			currentDir : C:\project2023\sts-3.9.18.RELEASE
-			 * 
-			 * */
+			model.addAttribute("msg","메뉴가 등록되었습니다.");
+			model.addAttribute("url","/admin/menu/menuMain");
+			return "/common/redirect";
 			
-			 System.out.println("originFileName : " + originFileName);
-			 System.out.println("ext : " + ext);
-			 System.out.println("savedName : " + savedName);
-			 System.out.println("menuImg : " + menuImg);
-			 System.out.println("filePath : " + filePath);
-			 System.out.println("param : " + param);
-			
-			// 첨부파일 테이블에도 저장해야됨
-			
-			return "";
+			//return "redirect:/admin/menu/menuMain";
 		}
 		
 	}
