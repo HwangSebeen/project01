@@ -21,8 +21,6 @@ function fn_gotoMain() {
 
 // 저장로직
 function fn_save(){
-	
-	console.log("111");
 	$("#frm_insert").attr('action', "<c:url value = '/admin/menu/menuInsert'/>");
 	$("#frm_insert").attr('method', "post");
 	
@@ -44,6 +42,12 @@ function setThumbnail(event){
 	
 	reader.readAsDataURL(event.target.files[0]);
 }
+
+$(document).ready(function() {
+    $(".btn_open").click(function() {
+        $("#popup").show();
+    });
+});
 </script>
 <title>예약하기</title>
 </head>
@@ -119,9 +123,11 @@ function setThumbnail(event){
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 110px;"><h5>옵션</h5></td>
-                        <td><input class="" id="menuOpt" type="text"
-                            name="menuOpt" maxlength="20" placeholder="입력하세요."></td>
+                        <td style="width: 110px;"><h5>옵션</h5><button class="btn_open" onClick="fn_goToMenuOptMng()" type="button">옵션관리</button></td>
+                        <td>
+                        	<input type='checkbox' name='menuOpt' value='' />
+  							<input type='checkbox' name='menuOpt' value='' />
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -130,6 +136,12 @@ function setThumbnail(event){
 	        <button onclick="fn_save()">저장</button>
 	       	<button onclick="fn_gotoMain()">목록</button>
       	</div>
+     <!-- 레이어팝업 영역 -->
+   		<div id="popup" style="display:none">
+      		<jsp:include page="/WEB-INF/views/admin/menu/menuOptMngPopUp.jsp"/>
+   		</div>
+      </div>
+	 <!-- 레이어팝업 영역 -->
     </div>
   </div>
   </div>
