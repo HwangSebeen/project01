@@ -13,6 +13,52 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 <link href="<%= request.getContextPath() %>/resources/css/common.css" rel="stylesheet">
+<style>
+.modal {
+    position: fixed;
+     top: 0; 
+    left: 0; 
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
+}
+
+.modal .bg {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modalBox {
+    position: absolute;
+    background-color: #fff;
+    width: 500px;
+    height: 400px;
+    padding: 15px;
+    overflow: scroll;
+    top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+}
+
+.hidden {
+    display: none;
+}
+
+.optListArea {
+    width: 300px;
+}
+.allWrapper {
+    text-align: center;
+
+    display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
 <script>
 // 메뉴매인으로 이동
 function fn_gotoMain() {
@@ -45,9 +91,27 @@ function setThumbnail(event){
 
 $(document).ready(function() {
     $(".btn_open").click(function() {
-        $("#popup").show();
+    	// 기존 옵션 목록 가져오기
+    	fn_selectOptList();
+    	
+        $("#popup_area").removeClass("hidden");
+    });
+    
+    $("#btn_close, #btn_cancel").click(function() {
+        $("#popup_area").addClass("hidden");
     });
 });
+
+// 기존 옵션 목록 가져오기
+function fn_selectOptList(){
+	
+}
+
+// 행 클릭시 밑에 뿌리기
+
+// 저장
+
+
 </script>
 <title>예약하기</title>
 </head>
@@ -123,7 +187,7 @@ $(document).ready(function() {
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 110px;"><h5>옵션</h5><button class="btn_open" onClick="fn_goToMenuOptMng()" type="button">옵션관리</button></td>
+                        <td style="width: 110px;"><h5>옵션</h5><button class="btn_open" type="button">옵션관리</button></td>
                         <td>
                         	<input type='checkbox' name='menuOpt' value='' />
   							<input type='checkbox' name='menuOpt' value='' />
@@ -137,14 +201,76 @@ $(document).ready(function() {
 	       	<button onclick="fn_gotoMain()">목록</button>
       	</div>
      <!-- 레이어팝업 영역 -->
-   		<div id="popup" style="display:none">
-      		<jsp:include page="/WEB-INF/views/admin/menu/menuOptMngPopUp.jsp"/>
+	 <div id="popup_area" class="modal hidden">
+		 <div class="bg">
+			<div class="modalBox qqq">
+			    <div class="allWrapper">
+			        <div>
+			        	<div class="exit_area">
+			        		<button id="btn_close">닫기</button>
+			        	</div>
+			            <h3>메뉴 옵션 관리</h3>
+			            <div class="optForm_body">
+			                <h4>옵션 목록</h4>
+			                <div class="optListArea"><!-- 목록 영역 start -->    	
+			                    <table id="example-table-1" width="100%" class="table table-bordered table-hover text-center">
+								<thead>
+									<tr>
+										<th>옵션번호</th>
+										<th>옵션명</th>
+										<th>옵션가격</th>
+									</tr>
+								</thead>
+								<tbody>				
+									<tr>
+										<td>1</td>
+										<td>user01</td>
+										<td>홍길동</td>
+									</tr>
+								</tbody>
+							</table>
+			                </div><!-- 목록 영역 end -->
+			                <div class="optDtlArea"> <!-- 등록/수정 영역 -->
+			                	<table class="table table-bordered table-hover div_content_login"	style="text-align: center; border: 1px solid #ddddddd">
+								<thead>
+									<tr>
+										<th colspan="2"><h3>옵션</h3></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="width: 110px;">옵션번호</td>
+										<td><input class="form-control" type="text" id="optNo" name="optNo" readonly style="background-color: lightgray;"
+											maxlength="20"></td>
+									</tr>
+									<tr>
+										<td style="width: 110px;">옵션명</td>
+										<td><input class="form-control" type="text" id="optNm" 
+											name="optNm" maxlength="20"></td>
+									</tr>
+			                        <tr>
+										<td style="width: 110px;">옵션 가격</td>
+										<td><input class="form-control" type="number" id="optAmt"
+											name="optAmt" maxlength="20"></td>
+									</tr>
+								</tbody>
+							</table>
+			                </div>
+			                <div class="btnArea">
+			                    <button type="button" class="commBtn" id="btn_cancel">취소</button>
+			                    <button type="button" id="btn_save" class="commBtn" value="">등록</button>
+			                </div>
+			            </div>
+			        </div>
+	    			</div>
+		      		
+		   		</div>
+	   		</div>
    		</div>
-      </div>
 	 <!-- 레이어팝업 영역 -->
     </div>
   </div>
   </div>
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>
