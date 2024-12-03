@@ -2,13 +2,16 @@ package com.project.admin.menu.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +103,27 @@ public class AdminMenuController {
 		model.addAttribute("url","/admin/menu/menuMain");
 		return "/common/redirect";
 		
+	}
+	
+	// 메뉴옵션 목록 조회
+	@RequestMapping("/selectOptList.do")
+	public void selectOptList(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response){
+		try {
+			List<Map<String,Object>> options = adminMenuService.selectOptList(map);
+	        JSONArray jsonArray = new JSONArray();
+	        
+	        for (int i = 0; i < options.size(); i++) {
+	            jsonArray.put(options.get(i));
+	        }
+
+	        PrintWriter pw;
+			pw = response.getWriter();
+			
+		    pw.print(jsonArray.toString());
+	        pw.flush();
+	        pw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

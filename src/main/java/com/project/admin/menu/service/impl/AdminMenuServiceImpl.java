@@ -49,6 +49,11 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 		return commonDao.selectList("com.project.mapper.AdminMenuMapper.selectAdminMenuList", param);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectOptList(Map param) {
+		return commonDao.selectList("com.project.mapper.AdminMenuMapper.selectOptList", param);
+	}
+
 	
 
 }

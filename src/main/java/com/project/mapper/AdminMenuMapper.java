@@ -14,4 +14,7 @@ public interface AdminMenuMapper {
 	
 	// 메뉴 목록
 	public Map<String,Object> selectAdminMenuList(Map<String,Object> map);
+	
+	// 메뉴 옵션 목록
+	public Map<String,Object> selectOptList(Map<String,Object> map);
 }
