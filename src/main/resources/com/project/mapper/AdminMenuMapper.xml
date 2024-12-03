@@ -74,4 +74,15 @@
 		 AND A.DEL_YN = 'N'
 		 AND B.DEL_YN = 'N'
 	</select>
+	
+	<select id="selectOptList" parameterType="java.util.Map" resultType="java.util.Map">
+	/* 메뉴 옵션 목록 조회 - selectOptList */
+		SELECT 
+			  MENU_NO 
+			, OPT_NO 
+			, OPT_NM 
+			, OPT_AMT 
+		  FROM T_MENU_OPT
+		WHERE DEL_YN = 'N'
+	</select>
 </mapper>

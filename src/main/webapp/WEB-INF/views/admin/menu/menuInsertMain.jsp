@@ -99,15 +99,53 @@ $(document).ready(function() {
     
     $("#btn_close, #btn_cancel").click(function() {
         $("#popup_area").addClass("hidden");
+        
+        $('#tbody_opt_list').empty(); 
     });
 });
 
 // 기존 옵션 목록 가져오기
 function fn_selectOptList(){
-	
+	$.ajax({
+        type: "POST" ,
+        url: "/admin/menu/selectOptList.do",
+        contentType: "application/json; charset=UTF-8",
+        dataType: 'json',
+        success: function (result) {
+            var option = "";
+            for(var i in result){
+       			var OPT_NO = result[i].OPT_NO;
+        	    var OPT_NM = result[i].OPT_NM;
+        	    var OPT_AMT = result[i].OPT_AMT;
+       			
+        	    option = "<tr>"
+        	    			+"<td>" + OPT_NO + "</td>"
+        	    			+"<td>" + OPT_NM + "</td>"
+        	    			+"<td>" + OPT_AMT + "</td>"
+        	    		+ "/<tr>"
+
+       	          $('#tbody_opt_list').append(option); 
+       	      }
+        },
+        error:function(){
+        	alert("옵션을 불러오지 못했습니다.");
+        }
+    });
 }
 
-// 행 클릭시 밑에 뿌리기
+//테이블의 행 클릭시 값 뿌리기
+ $(document).on("click", "#tbody_opt_list tr", function () {
+	 var td = $(this).children();
+	 
+	 var optNo = td.eq(0).text();    
+	 var optNm = td.eq(1).text();    
+	 var optAmt = td.eq(2).text();
+	 
+	 $("#optNo").val(optNo);
+	 $("#optNm").val(optNm);
+	 $("#optAmt").val(optAmt);
+ });
+
 
 // 저장
 
@@ -213,7 +251,7 @@ function fn_selectOptList(){
 			            <div class="optForm_body">
 			                <h4>옵션 목록</h4>
 			                <div class="optListArea"><!-- 목록 영역 start -->    	
-			                    <table id="example-table-1" width="100%" class="table table-bordered table-hover text-center">
+			                    <table id="table_opt" width="100%" class="table table-bordered table-hover text-center">
 								<thead>
 									<tr>
 										<th>옵션번호</th>
@@ -221,12 +259,8 @@ function fn_selectOptList(){
 										<th>옵션가격</th>
 									</tr>
 								</thead>
-								<tbody>				
-									<tr>
-										<td>1</td>
-										<td>user01</td>
-										<td>홍길동</td>
-									</tr>
+								<tbody id="tbody_opt_list">				
+									<!-- 동적생성영역 -->
 								</tbody>
 							</table>
 			                </div><!-- 목록 영역 end -->
