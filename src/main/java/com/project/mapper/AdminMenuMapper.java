@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.project.model.BoardVO;
 
-public interface AdminMenuMapper {
+public interface AdminMenuMapper { 
 
 	// 메뉴 등록
 	public int menuInsert(Map<String,Object> map);

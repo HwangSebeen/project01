@@ -21,10 +21,10 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 	private CommonService commonService;
 	
 	// 메뉴순번구하기
-	@Override
+	@Override 
 	public Map<String, Object> selectNewMenuNo(Map<String, Object> param) {
 		return commonDao.selectOne("com.project.mapper.AdminMenuMapper.selectNewMenuNo", param);
-	}
+	}  
 	
 	// 메뉴저장
 	@Override
