@@ -3,7 +3,7 @@ package com.project.admin.menu.service;
 import java.util.List;
 import java.util.Map;
 
-public interface AdminMenuService {
+public interface AdminMenuService { 
 
 	public int menuInsert(Map<String, Object> param);
 

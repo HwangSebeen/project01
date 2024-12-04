@@ -93,7 +93,7 @@
 	      UPDATE
 	         SET OPT_NM = #{optNm}
 	         , OPT_AMT = #{optAmt}
-	         , DEL_YN = #{delYn}
+	         , DEL_YN = #{delYn} 
 	         , FST_INS_DTE = SYSDATE
 	         , LST_MODIFY_DTE = SYSDATE
 	 WHEN NOT MATCHED THEN

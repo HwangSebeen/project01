@@ -130,7 +130,7 @@ $(document).ready(function() {
          success: function (result) {
          	if(result > 0){
          		alert("옵션이 성공적으로 저장되었습니다.");
-         	} 
+         	}  
          	fn_selectOptList();
          	
          	$("#optNo").val("");

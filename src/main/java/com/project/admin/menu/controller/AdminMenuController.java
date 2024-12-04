@@ -121,7 +121,7 @@ public class AdminMenuController {
 	        pw.flush();
 	        pw.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class AdminMenuController {
 		try {
 			int result = adminMenuService.saveOpt(map);
 			
-			PrintWriter pw = response.getWriter();
+			PrintWriter pw = response.getWriter(); 
 			
 		    pw.print(result);
 	        pw.flush();
