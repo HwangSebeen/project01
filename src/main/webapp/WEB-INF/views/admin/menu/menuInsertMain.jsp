@@ -102,10 +102,54 @@ $(document).ready(function() {
         
         $('#tbody_opt_list').empty(); 
     });
+    
+    // 신규등록 버튼
+    $("#btn_new").click(function() {
+        $("#optNo").val("");
+    	$("#optNm").val("");
+    	$("#optAmt").val("");
+    	
+    	var cnt = $("#tbody_opt_list").length;
+    	$("#optNo").val(cnt+1);
+    });
+    
+ // 옵션만 저장
+ $("#btn_save").click(function() {
+//  function fn_saveOpt(){debugger;
+ 	var optNo = $("#optNo").val();debugger;
+ 	var optNm = $("#optNm").val();debugger;
+ 	var optAmt = $("#optAmt").val();debugger;
+ 	var delYn = "N";
+ 	
+ 	$.ajax({
+         type: "POST" ,
+         url: "/admin/menu/saveOpt.do",
+         contentType: "application/x-www-form-urlencoded",
+         data : { optNo : optNo, optNm : optNm, optAmt : optAmt , delYn : delYn}, 
+         dataType: 'json',
+         success: function (result) {
+         	if(result > 0){
+         		alert("옵션이 성공적으로 저장되었습니다.");
+         	} 
+         	fn_selectOptList();
+         	
+         	$("#optNo").val("");
+         	$("#optNm").val("");
+         	$("#optAmt").val("");
+         },
+         error:function(){
+         	alert("옵션을 저장하지 못했습니다.");
+         }
+     });
+ });
+    
 });
+
 
 // 기존 옵션 목록 가져오기
 function fn_selectOptList(){
+	$('#tbody_opt_list').empty(); 	// 테이블 내용 비우기
+	
 	$.ajax({
         type: "POST" ,
         url: "/admin/menu/selectOptList.do",
@@ -122,6 +166,7 @@ function fn_selectOptList(){
         	    			+"<td>" + OPT_NO + "</td>"
         	    			+"<td>" + OPT_NM + "</td>"
         	    			+"<td>" + OPT_AMT + "</td>"
+        	    			+ "<input type='hidden' id='cnt' >" + i + "</>"
         	    		+ "/<tr>"
 
        	          $('#tbody_opt_list').append(option); 
@@ -145,10 +190,6 @@ function fn_selectOptList(){
 	 $("#optNm").val(optNm);
 	 $("#optAmt").val(optAmt);
  });
-
-
-// 저장
-
 
 </script>
 <title>예약하기</title>
@@ -264,6 +305,7 @@ function fn_selectOptList(){
 								</tbody>
 							</table>
 			                </div><!-- 목록 영역 end -->
+			                <div><button type="button" class="commBtn" id="btn_new">신규등록</button></div>
 			                <div class="optDtlArea"> <!-- 등록/수정 영역 -->
 			                	<table class="table table-bordered table-hover div_content_login"	style="text-align: center; border: 1px solid #ddddddd">
 								<thead>
@@ -292,7 +334,7 @@ function fn_selectOptList(){
 			                </div>
 			                <div class="btnArea">
 			                    <button type="button" class="commBtn" id="btn_cancel">취소</button>
-			                    <button type="button" id="btn_save" class="commBtn" value="">등록</button>
+			                    <button type="button" id="btn_save" class="commBtn">저장</button>
 			                </div>
 			            </div>
 			        </div>

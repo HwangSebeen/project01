@@ -17,4 +17,10 @@ public interface AdminMenuMapper {
 	
 	// 메뉴 옵션 목록
 	public Map<String,Object> selectOptList(Map<String,Object> map);
+	
+	// 옵션 등록
+	public int saveOpt(Map<String,Object> map);
+	
+	// 메뉴에 대한 옵션 등록
+	public int saveMenuOpt(Map<String,Object> map);
 }

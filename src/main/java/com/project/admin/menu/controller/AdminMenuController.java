@@ -76,7 +76,6 @@ public class AdminMenuController {
 			String ext = originFileName.substring(originFileName.lastIndexOf("."));
 			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 			  
-//			String menuImage = "/images/menu/" + savedName;
 			String menuImgPath = "/resources/images/menuImg/" + savedName;
 			
 			singleFile.transferTo(new File(filePath + "\\" + savedName));
@@ -86,7 +85,6 @@ public class AdminMenuController {
 			fileMap.put("docId", savedName);				// 저장파일명
 			fileMap.put("fileOriginName", originFileName);	// 실제파일명
 			fileMap.put("fileExt", ext);
-//			fileMap.put("url", filePath);
 			fileMap.put("url", menuImgPath);	// 리소스/이미지/메뉴
 			fileMap.put("fileTyp", "menu");
 			fileMap.put("fileSeq", "1");
@@ -122,6 +120,23 @@ public class AdminMenuController {
 		    pw.print(jsonArray.toString());
 	        pw.flush();
 	        pw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 메뉴옵션 저장
+	@RequestMapping("/saveOpt.do")
+	public void saveOpt(@RequestParam Map map, HttpServletRequest request, HttpServletResponse response){
+		try {
+			int result = adminMenuService.saveOpt(map);
+			
+			PrintWriter pw = response.getWriter();
+			
+		    pw.print(result);
+	        pw.flush();
+	        pw.close();
+	        
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

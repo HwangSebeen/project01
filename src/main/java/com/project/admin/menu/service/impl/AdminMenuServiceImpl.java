@@ -37,7 +37,10 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 		int result = 0;
 		
 		if(fileResult > 0) {
+			// 메뉴 저장
 			result = commonDao.insert("com.project.mapper.AdminMenuMapper.menuInsert", param);
+			// 메뉴에 대한 옵션 등록
+			commonDao.insert("com.project.mapper.AdminMenuMapper.saveMenuOpt", param);
 		}
 		
 		return result;
@@ -49,9 +52,16 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 		return commonDao.selectList("com.project.mapper.AdminMenuMapper.selectAdminMenuList", param);
 	}
 
+	// 옵션 조회
 	@Override
 	public List<Map<String, Object>> selectOptList(Map param) {
 		return commonDao.selectList("com.project.mapper.AdminMenuMapper.selectOptList", param);
+	}
+
+	// 옵션 저장
+	@Override
+	public int saveOpt(Map param) {
+		return commonDao.insert("com.project.mapper.AdminMenuMapper.saveOpt", param);
 	}
 
 	

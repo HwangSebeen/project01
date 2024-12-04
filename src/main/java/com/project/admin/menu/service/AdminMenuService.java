@@ -13,4 +13,6 @@ public interface AdminMenuService {
 
 	public List<Map<String, Object>> selectOptList(Map map);
 
+	public int saveOpt(Map map);
+
 }

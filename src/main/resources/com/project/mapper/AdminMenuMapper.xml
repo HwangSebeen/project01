@@ -10,7 +10,6 @@
 		WHERE MENU_TYP = #{menuTyp}
 	</select>
 	
-	<!-- 게시판 등록 -->
 	<insert id="menuInsert">
 	MERGE INTO T_MENU
 	USING DUAL
@@ -78,11 +77,66 @@
 	<select id="selectOptList" parameterType="java.util.Map" resultType="java.util.Map">
 	/* 메뉴 옵션 목록 조회 - selectOptList */
 		SELECT 
-			  MENU_NO 
-			, OPT_NO 
+			  OPT_NO 
 			, OPT_NM 
 			, OPT_AMT 
-		  FROM T_MENU_OPT
+		  FROM T_OPT
 		WHERE DEL_YN = 'N'
 	</select>
+	
+	<insert id="saveOpt">
+	/* 옵션 저장 - saveOpt */
+	MERGE INTO T_OPT
+	USING DUAL
+	   ON (OPT_NO = #{optNo})
+	  WHEN MATCHED THEN
+	      UPDATE
+	         SET OPT_NM = #{optNm}
+	         , OPT_AMT = #{optAmt}
+	         , DEL_YN = #{delYn}
+	         , FST_INS_DTE = SYSDATE
+	         , LST_MODIFY_DTE = SYSDATE
+	 WHEN NOT MATCHED THEN
+	      INSERT (  OPT_NO
+	      		  , OPT_NM
+	      		  , OPT_AMT
+				  , DEL_YN
+    			  , FST_INS_DTE
+    			  , LST_MODIFY_DTE
+		) VALUES (
+				  #{optNo}
+				, #{optNm}
+				, #{optAmt}
+				, 'N'
+				, SYSDATE
+				, SYSDATE
+			  )
+	</insert>
+	
+	<insert id="saveMenuOpt">
+	/* 메뉴에 대한 각각 옵션 저장 - selectOptList */
+	MERGE INTO T_MENU_OPT
+	USING DUAL
+	   ON (MENU_NO = #{menuNo}
+	   	 AND OPT_NO = #{opt_no})
+	  WHEN MATCHED THEN
+	      UPDATE
+	         SET DEL_YN = #{delYn}
+	         , FST_INS_DTE = SYSDATE
+	         , LST_MODIFY_DTE = SYSDATE
+	 WHEN NOT MATCHED THEN
+	      INSERT (
+	      			MENU_NO
+	      		  , OPT_NO
+				  , DEL_YN
+    			  , FST_INS_DTE
+    			  , LST_MODIFY_DTE
+		) VALUES (
+				  #{menuNo}
+				, #{optNo}
+				, 'N'
+				, SYSDATE
+				, SYSDATE
+			  )
+	</insert>
 </mapper>
