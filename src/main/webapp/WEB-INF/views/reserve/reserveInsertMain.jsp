@@ -64,12 +64,86 @@ a {
 	width: 170px; 
 	margin: 30px auto 0;
 }
+.modal {
+    position: fixed;
+     top: 0; 
+    left: 0; 
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
+}
+
+.modal .bg {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modalBox {
+    position: absolute;
+    background-color: #fff;
+    width: 500px;
+    height: 400px;
+    padding: 15px;
+    overflow: scroll;
+    top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+}
+
+.hidden {
+    display: none;
+}
+
+.optListArea {
+    width: 300px;
+}
+.allWrapper {
+    text-align: center;
+
+    display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.css">
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.js"></script>
+<%
+	String userId = (String)session.getAttribute("userId");
+	String userNm = (String)session.getAttribute("userNm");
+%>
 <script>
+
+$(document).ready(function(){
+	
+	var userId = '<%=userId%>'; /*세션값*/
+	debugger;
+	// 로그인 안되어있으면 막기
+	if(userId == 'null'){
+		alert("로그인 후 이용바랍니다.");
+		location.href='<c:out value="${pageContext.request.contextPath}"/>/';
+	}
+	
+});
+
+$(".btn_open").click(function() {
+    $("#popup_area").removeClass("hidden");
+});
+
+$("#btn_close").click(function() {
+    $("#popup_area").addClass("hidden");
+});
 </script>
 <title>예약하기</title>
 </head>
 <body>
+
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div id="container">
 		<nav class="snb"></nav>
@@ -79,9 +153,155 @@ a {
 					<h3 style="font-size: 24px;">예약하기</h3>
 				</div>
 				<hr style="width: 700px; padding-right: 130px;">
+				<div id='calendar'></div>
+				<!--  fullCalendar 라이브러리 영역 -->
 			</div>
 		</div>
 	</div>
+	<!--  모달 팝업 영역 START -->
+	<div id="popup_area" class="modal hidden">
+		<div class="bg">
+			<div class="modalBox qqq">
+				<div class="allWrapper">
+					<div>
+						<div class="exit_area">
+							<button id="btn_close">닫기</button>
+						</div>
+						<h3>예약</h3>
+						<div class="optForm_body">
+							<form method="post" id="frm_join">
+								<table class=""
+									style="text-align: center; border: 1px solid #ddddddd">
+									<thead>
+										<tr>
+											<th colspan="3"><h4>예약 양식</h4></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td style="width: 110px;"><h5>예약 날짜</h5></td>
+											<td><input class="" type="text" id="resvDte" name="resvDte" >
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 110px;"><h5>예약 시간</h5></td>
+											<td class="2">
+												시작시간 : <input class="" id="resvStDte" type="text" name="resvStDte">
+												<br>종료시간 : <input class="" id="resvEdDte" type="text" name="resvEdDte">
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 110px;"><h5>예약자 성명</h5></td>
+											<td class="2">
+												<input class="" id="resvNm" type="text" name="resvNm" maxlength="20">
+												<input class="" id="userId" type="hidden" name="userId" maxlength="20">
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 110px;"><h5>예약 주제</h5></td>
+											<td class="2">
+												<input class="" id="resvTitle" type="text" name="resvTitle" maxlength="20" placeholder="예약 주제를 입력하세요.">
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 110px;"><h5>예약 내용</h5></td>
+											<td class="2">
+												<input type="text" id="resvContent" name="resvContent" placeholder="예약 내용을 입력하세요.">
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 110px;">
+												<h5>전화번호</h5>
+											</td>
+											<td style="text-align: left;"><select name="resvPhoneNum1" id="resvPhoneNum1">
+													<option value="02">02</option>
+													<option value="010">010</option>
+													<option value="011">011</option>
+													<option value="016">016</option>
+													<option value="017">017</option>
+													<option value="018">018</option>
+													<option value="019">019</option>
+											</select> - <input type="text" name="resvPhoneNum2" size="8" id="resvPhoneNum2" /> - <input
+												type="text" name="resvPhoneNum3" size="8" id="resvPhoneNum3" /></td>
+										</tr>
+										<tr>
+											<td style="width: 110px;"><h5>예약 지점</h5></td>
+											<td>
+												<select name="userOfficeNo" id="userOfficeNo"></select>
+											</td>
+										</tr>
+										<tr>
+											<td style="text-align: left;" colspan="3"> 
+												<input class="" type="submit" value="예악 신청하기">
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+						</div>
+					</div>
+	
+				</div>
+			</div>
+		</div>
+	
+	<!-- 모달영역 END -->
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+					
+// 		$(function () {
+//                var request = $.ajax({
+//                    url: "/reserve/selectReserveList", // 변경하기
+//                    method: "GET",
+//                    dataType: "json"
+//            });
+// 		request.done(function (data) {
+		var calendarEl = document.getElementById('calendar');
+		var calendar = new FullCalendar.Calendar(calendarEl, {
+		initialView : 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
+		headerToolbar : { // 헤더에 표시할 툴 바
+			start : 'prev next today',
+			center : 'title',
+			end : 'dayGridMonth,dayGridWeek,dayGridDay'
+		},
+		titleFormat : function(date) {
+			return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
+		},
+		selectable : true, // 달력 일자 드래그 설정가능
+		droppable : true,
+		editable : true,
+		nowIndicator: true, // 현재 시간 마크
+		locale: 'ko' // 한국어 설정
+		, dateClick: function(info) { //일자 셀 클릭 함수
+			var today = new Date();
+			var year = today.getFullYear();
+			var month = ('0' + (today.getMonth() + 1)).slice(-2);
+			var day = ('0' + today.getDate()).slice(-2);
+			var todayString = year + '-' + month  + '-' + day;
+			if(info.dateStr < todayString){
+				alert(todayString + " 이전은 예약이 불가능합니다.");
+				return;
+			}
+							
+			// 예약 팝업 띄우기  
+			 $("#popup_area").removeClass("hidden");
+
+               //alert("info :: " + info);debugger;
+			            }
+			, events: [
+					     { title: 'Click for Google',
+					       start: '2024-12-28'
+					      }
+					  ]
+// 			, events: data
+
+			});
+		calendar.render();
+	});
+// 			});
+</script>
 </html>

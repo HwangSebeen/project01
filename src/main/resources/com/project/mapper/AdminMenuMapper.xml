@@ -118,7 +118,7 @@
 	MERGE INTO T_MENU_OPT
 	USING DUAL
 	   ON (MENU_NO = #{menuNo}
-	   	 AND OPT_NO = #{opt_no})
+	   	 AND OPT_NO = #{optNo})
 	  WHEN MATCHED THEN
 	      UPDATE
 	         SET DEL_YN = #{delYn}
@@ -139,4 +139,40 @@
 				, SYSDATE
 			  )
 	</insert>
+	
+	<select id="selectDetailMenu" parameterType="java.util.Map" resultType="java.util.Map">
+	/* 메뉴 조회 - selectDetailMenu */
+		SELECT 
+			  A.MENU_NO
+			, A.MENU_KOR_NM
+			, A.MENU_ENG_NM
+			, A.ORIG_AMT
+			, A.SALE_AMT
+			, A.DOC_ID 
+			, B.FILE_STOR_PATH
+			, A.CATEGORY
+			, A.MENU_DTL
+		 FROM T_MENU A
+		 	, T_ATTC_FILE B
+		WHERE 1 = 1
+		  AND A.DOC_ID = B.DOC_ID
+		  AND A.MENU_NO = #{menuNo}
+		  AND A.MENU_TYP = 1
+		  AND A.DEL_YN = 'N'
+	</select>
+	
+	<select id="selectAdminMenuOptList" parameterType="java.util.Map" resultType="java.util.Map">
+	/* 메뉴 옵션 조회 - selectAdminMenuOptList */
+		SELECT 
+			A.OPT_NO 
+			, A.OPT_NM 
+			, A.OPT_AMT 
+			, B.MENU_NO 
+		 FROM T_OPT A
+		    , T_MENU_OPT B
+		WHERE A.OPT_NO = B.OPT_NO
+		 AND B.MENU_NO = #{menuNo}
+		 AND A.DEL_YN = 'N'
+		 AND B.DEL_YN = 'N'
+	</select>
 </mapper>
