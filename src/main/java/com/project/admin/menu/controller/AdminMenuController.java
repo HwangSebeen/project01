@@ -49,7 +49,7 @@ public class AdminMenuController {
 	}
 	
 	@GetMapping("/menuInsertMain")
-	public void adminMenuInsert( ) {
+	public void adminMenuInsert() {
 		log.info("관리자 메뉴등록 진입");
 	}
 	
@@ -113,6 +113,7 @@ public class AdminMenuController {
 	        for (int i = 0; i < options.size(); i++) {
 	            jsonArray.put(options.get(i));
 	        }
+	        
 
 	        PrintWriter pw;
 			pw = response.getWriter();
@@ -139,6 +140,25 @@ public class AdminMenuController {
 	        
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/* 메뉴 조회 */
+	@GetMapping("/menuDetailMain")
+	public void menuDetailMain(int no, Model model) {
+		try {	
+			Map<String, Object> inputMap = new HashMap<String,Object>();
+			inputMap.put("menuNo", no);
+			
+			Map<String,Object> param = adminMenuService.selectDetailMenu(inputMap);
+			List<Map<String,Object>> list = adminMenuService.selectAdminMenuOptList(inputMap);	// 조회
+			
+			model.addAttribute("map", param);
+			model.addAttribute("list", list);
+			
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.err.println("에러발생!");
 		}
 	}
 }
