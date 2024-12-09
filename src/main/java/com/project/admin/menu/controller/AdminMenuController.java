@@ -49,7 +49,7 @@ public class AdminMenuController {
 	}
 	
 	@GetMapping("/menuInsertMain")
-	public void adminMenuInsert( ) {
+	public void adminMenuInsert() {
 		log.info("관리자 메뉴등록 진입");
 	}
 	
@@ -60,8 +60,15 @@ public class AdminMenuController {
 			model.addAttribute("msg","메뉴 이미지 에러..");
 		} else {
 			param.put("menuTyp", "01");
-			Map<String,Object> map = adminMenuService.selectNewMenuNo(param);
-			param.put("menuNo", map.get("MENU_NO"));
+			
+			if(param.get("menuNo") == null) {
+				Map<String,Object> map = adminMenuService.selectNewMenuNo(param);
+				param.put("menuNo", map.get("MENU_NO"));
+			}
+			
+			if(param.get("delYn") == null) {
+				param.put("delYn", "N");
+			}
 			
 			//String currentDir = System.getProperty("user.dir");
 			
@@ -91,11 +98,28 @@ public class AdminMenuController {
 			
 			param.put("fileMap", fileMap);
 			param.put("docId", savedName);
-			param.put("delYn", 'N');
 			
 			int result = adminMenuService.menuInsert(param);
 			
-			model.addAttribute("msg","메뉴가 등록되었습니다.");
+			Map<String,Object> optMap = new HashMap<String,Object>();
+			optMap.put("menuNo", param.get("menuNo"));
+			optMap.put("delYn", param.get("delYn"));
+			
+			String[] menuOpt = request.getParameterValues("menuOpt");
+			int optResult = 0;
+			if(result > 0) {
+				for(int i=0; i<menuOpt.length; i++) {
+					optMap.put("optNo", menuOpt[i]);
+					optResult = adminMenuService.saveMenuOpt(optMap);
+				}
+			} 
+			
+			if(result > 0 && optResult > 0) {
+				model.addAttribute("msg","메뉴가 등록되었습니다.");
+			} else {
+				model.addAttribute("msg","메뉴 등록에 실패하였습니다.");
+			}
+			
 		}
 		
 		model.addAttribute("url","/admin/menu/menuMain");
@@ -113,6 +137,7 @@ public class AdminMenuController {
 	        for (int i = 0; i < options.size(); i++) {
 	            jsonArray.put(options.get(i));
 	        }
+	        
 
 	        PrintWriter pw;
 			pw = response.getWriter();
@@ -139,6 +164,25 @@ public class AdminMenuController {
 	        
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/* 메뉴 조회 */
+	@GetMapping("/menuDetailMain")
+	public void menuDetailMain(int no, Model model) {
+		try {	
+			Map<String, Object> inputMap = new HashMap<String,Object>();
+			inputMap.put("menuNo", no);
+			
+			Map<String,Object> param = adminMenuService.selectDetailMenu(inputMap);
+			List<Map<String,Object>> list = adminMenuService.selectAdminMenuOptList(inputMap);	// 조회
+			
+			model.addAttribute("map", param);
+			model.addAttribute("list", list);
+			
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.err.println("에러발생!");
 		}
 	}
 }

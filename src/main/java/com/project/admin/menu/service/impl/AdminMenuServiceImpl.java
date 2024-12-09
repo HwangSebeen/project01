@@ -24,7 +24,7 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 	@Override 
 	public Map<String, Object> selectNewMenuNo(Map<String, Object> param) {
 		return commonDao.selectOne("com.project.mapper.AdminMenuMapper.selectNewMenuNo", param);
-	}
+	}  
 	
 	// 메뉴저장
 	@Override
@@ -39,11 +39,15 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 		if(fileResult > 0) {
 			// 메뉴 저장
 			result = commonDao.insert("com.project.mapper.AdminMenuMapper.menuInsert", param);
-			// 메뉴에 대한 옵션 등록
-			commonDao.insert("com.project.mapper.AdminMenuMapper.saveMenuOpt", param);
 		}
 		
 		return result;
+	}
+	
+	// 메뉴에 대한 옵션 등록
+	@Override
+	public int saveMenuOpt(Map<String, Object> param) {
+		return commonDao.insert("com.project.mapper.AdminMenuMapper.saveMenuOpt", param);
 	}
 
 	// 메뉴 목록 조회
@@ -64,6 +68,14 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 		return commonDao.insert("com.project.mapper.AdminMenuMapper.saveOpt", param);
 	}
 
-	
+	@Override
+	public Map<String, Object> selectDetailMenu(Map<String, Object> inputMap) {
+		return commonDao.selectOne("com.project.mapper.AdminMenuMapper.selectDetailMenu", inputMap);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAdminMenuOptList(Map<String, Object> param) {
+		return commonDao.selectList("com.project.mapper.AdminMenuMapper.selectAdminMenuOptList", param);
+	}
 
 }
