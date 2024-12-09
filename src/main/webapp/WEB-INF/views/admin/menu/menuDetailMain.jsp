@@ -124,7 +124,7 @@ $(document).ready(function() {
  	var optNm = $("#optNm").val();
  	var optAmt = $("#optAmt").val();
  	var delYn = "N";
- 	
+ 	 
  	$.ajax({
 	         type: "POST" ,
 	         url: "/admin/menu/saveOpt.do",
@@ -157,19 +157,28 @@ function fn_optSetting() {
         dataType: 'json',
         success: function (result) {
             var option = "";
+            
+            var k = 1;
             for(var i in result){
        			var OPT_NO = result[i].OPT_NO;
         	    var OPT_NM = result[i].OPT_NM;
-       			
-        	    option = "<input type='checkbox' name='menuOpt' value='" + OPT_NO + "' />" + OPT_NM;
+        	    
+        	    option = "<input type='checkbox' id='opt_0" + k + "' name='menuOpt' value='" + OPT_NO + "' />" + OPT_NM;
 
        	        $('#td').append(option); 
+       	
+       			fn_checkedOpt();
+       			k++;
        	      }
         },
         error:function(){
         	alert("옵션을 불러오지 못했습니다.");
         }
     });
+}
+
+function fn_checkedOpt(){
+	
 }
 
 // 기존 옵션 목록 가져오기
@@ -195,6 +204,8 @@ function fn_selectOptList(){
         	    		+ "/<tr>"
 
        	          $('#tbody_opt_list').append(option); 
+        	    		
+        	      fn_checkOpt();	// 체크하기
        	      }
         },
         error:function(){
@@ -230,6 +241,7 @@ function fn_selectOptList(){
         <hr style="width: 990px;">
 <!--         <form id="frm_insert" onsubmit="return fn_validation()" enctype="multipart/form-data"> -->
          <form id="frm_insert" enctype="multipart/form-data">
+         	<input type="hidden" value="${map.MENU_NO}"/>
             <table class=""
                 style="text-align: center; border: 1px solid #ddddddd">
                 <thead>
@@ -242,7 +254,7 @@ function fn_selectOptList(){
                         <td style="width: 110px; height:350px;"><h5>메뉴이미지</h5></td>
                         <td class="2">
                             <div id="image_container" style="border : 1px solid black; width : 300px; height:300px; ">
-                            <!-- 이미지영역 -->
+                            	<img src='${map.FILE_STOR_PATH}' style="width : 300px; height:300px; ">
                             </div>
                             <input style="margin-top:10px;" class="form-control form-control-user" type="file" name="menuImg" id="menuImg" onchange="setThumbnail(event);">
                         </td>
@@ -250,13 +262,13 @@ function fn_selectOptList(){
                     <tr>
                         <td style="width: 110px;"><h5>메뉴명(한글)</h5></td>
                         <td class="2">
-                            <input class="" id="menuKorNm" type="text" name="menuKorNm" maxlength="50" value='' placeholder="메뉴명을 입력하세요.">
+                            <input class="" id="menuKorNm" type="text" name="menuKorNm" maxlength="50" value="${map.MENU_KOR_NM}" placeholder="메뉴명을 입력하세요.">
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 110px;"><h5>메뉴(영문명)</h5></td>
                         <td class="2">
-                            <input class="" id="menuEngNm" type="text" name="menuEngNm" maxlength="50" placeholder="메뉴명을 입력하세요.">
+                            <input class="" id="menuEngNm" type="text" name="menuEngNm" value="${map.MENU_ENG_NM}" maxlength="50" placeholder="메뉴명을 입력하세요.">
                         </td>
                     </tr>
                     <tr>
@@ -265,29 +277,29 @@ function fn_selectOptList(){
                         </td>
                         <td style="text-align: left;">
                         	<select name="category" id="category" style="margin-left:65px;"> <!--  공통코드로 관리 -->
-                                <option value="01">음료</option>
-                                <option value="02">디저트</option>
-                                <option value="03">MD</option>
-                                <option value="04">기타</option>
+                                <option value="01" <c:if test ="${map.CATEGORY eq 01}"> selected="selected"</c:if>>음료</option>
+                                <option value="02" <c:if test ="${map.CATEGORY eq 02}"> selected="selected"</c:if>>디저트</option>
+                                <option value="03" <c:if test ="${map.CATEGORY eq 03}"> selected="selected"</c:if>>MD</option>
+                                <option value="04" <c:if test ="${map.CATEGORY eq 04}"> selected="selected"</c:if>>기타</option>
                         	</select>
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 110px;"><h5>가격</h5></td>
                         <td class="2">
-                            <input class="" id="origAmt" type="number" name="origAmt" maxlength="20" placeholder="가격을 입력하세요.">
+                            <input class="" id="origAmt" type="number" name="origAmt" value="${map.ORIG_AMT}" maxlength="20" placeholder="가격을 입력하세요.">
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 110px;"><h5>판매가격</h5></td>
                         <td class="2">
-                            <input class="" id="saleAmt" type="number" name="saleAmt" maxlength="20" placeholder="판매가격을 입력하세요.">
+                            <input class="" id="saleAmt" type="number" name="saleAmt" value="${map.SALE_AMT}" maxlength="20" placeholder="판매가격을 입력하세요.">
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 110px;"><h5>메뉴설명</h5></td>
                         <td class="2">
-                            <input class="" id="menuDtl" type="text" name="menuDtl" maxlength="20" placeholder="메뉴설명을 입력하세요.">
+                            <input class="" id="menuDtl" type="text" name="menuDtl" value="${map.MENU_DTL}" maxlength="20" placeholder="메뉴설명을 입력하세요.">
                         </td>
                     </tr>
                     <tr>

@@ -64,6 +64,16 @@ public class AdminMenuServiceImpl implements AdminMenuService{
 		return commonDao.insert("com.project.mapper.AdminMenuMapper.saveOpt", param);
 	}
 
+	@Override
+	public Map<String, Object> selectDetailMenu(Map<String, Object> inputMap) {
+		return commonDao.selectOne("com.project.mapper.AdminMenuMapper.selectDetailMenu", inputMap);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAdminMenuOptList(Map<String, Object> param) {
+		return commonDao.selectList("com.project.mapper.AdminMenuMapper.selectAdminMenuOptList", param);
+	}
+
 	
 
 }
