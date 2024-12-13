@@ -1,5 +1,6 @@
 package com.project.reserve.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +33,14 @@ private static final Logger log = LoggerFactory.getLogger(ReserveController.clas
 		log.info("예약하기 진입");
 	}
 	
+	@GetMapping("/reserveInsertP")
+	public void reserveInsertP( ) {
+		log.info("예약하기 신청 진입");
+	}
+	
 	@GetMapping("/selectReserveList")
     @ResponseBody
-    public void selectReserveList(HttpServletResponse response) {
+    public void selectReserveList(HttpServletResponse response) throws IOException {
         List<Map<String,Object>> list = reserveService.selectReserveList();
  
         JSONObject jsonObj = new JSONObject();
