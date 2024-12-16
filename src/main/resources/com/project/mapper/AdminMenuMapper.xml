@@ -118,7 +118,7 @@
 	MERGE INTO T_MENU_OPT
 	USING DUAL
 	   ON (MENU_NO = #{menuNo}
-	   	 AND OPT_NO = #{opt_no})
+	   	 AND OPT_NO = #{optNo})
 	  WHEN MATCHED THEN
 	      UPDATE
 	         SET DEL_YN = #{delYn}
