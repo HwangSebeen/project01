@@ -19,4 +19,9 @@ public interface AdminMenuService {
 
 	public List<Map<String, Object>> selectAdminMenuOptList(Map<String, Object> inputMap);
 
+<<<<<<< HEAD
+	public int saveMenuOpt(Map<String, Object> param);
+
+=======
+>>>>>>> refs/heads/SEBEEN
 }

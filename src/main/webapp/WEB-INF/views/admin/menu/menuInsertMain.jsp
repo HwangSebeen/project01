@@ -119,13 +119,39 @@ $(document).ready(function() {
     
  // 옵션만 저장
  $("#btn_save").click(function() {
+<<<<<<< HEAD
+=======
 //  function fn_saveOpt(){debugger;
+>>>>>>> refs/heads/SEBEEN
  	var optNo = $("#optNo").val();
  	var optNm = $("#optNm").val();
  	var optAmt = $("#optAmt").val();
  	var delYn = "N";
  	
  	$.ajax({
+<<<<<<< HEAD
+
+         type: "POST" ,
+         url: "/admin/menu/saveOpt.do",
+         contentType: "application/x-www-form-urlencoded",
+         data : { optNo : optNo, optNm : optNm, optAmt : optAmt , delYn : delYn}, 
+         dataType: 'json',
+         success: function (result) {
+         	if(result > 0){
+         		alert("옵션이 성공적으로 저장되었습니다.");
+         	}  
+         	fn_selectOptList();
+         	
+         	$("#optNo").val("");
+         	$("#optNm").val("");
+         	$("#optAmt").val("");
+         },
+         error:function(){
+         	alert("옵션을 저장하지 못했습니다.");
+         }
+     });
+ });
+=======
 	         type: "POST" ,
 	         url: "/admin/menu/saveOpt.do",
 	         contentType: "application/x-www-form-urlencoded",
@@ -146,6 +172,7 @@ $(document).ready(function() {
 	         }
      		});
  		});
+>>>>>>> refs/heads/SEBEEN
     
 });
 
@@ -157,6 +184,19 @@ function fn_optSetting() {
         dataType: 'json',
         success: function (result) {
             var option = "";
+<<<<<<< HEAD
+            
+            var k = 1;
+            for(var i in result){
+       			var OPT_NO = result[i].OPT_NO;
+        	    var OPT_NM = result[i].OPT_NM;
+        	    
+        	    option = "<input type='checkbox' id='opt_0" + k + "' name='menuOpt' value='" + OPT_NO + "' />" + OPT_NM;
+
+       	        $('#td').append(option); 
+       	
+       			k++;
+=======
             for(var i in result){
        			var OPT_NO = result[i].OPT_NO;
         	    var OPT_NM = result[i].OPT_NM;
@@ -164,6 +204,7 @@ function fn_optSetting() {
         	    option = "<input type='checkbox' name='menuOpt' value='" + OPT_NO + "' />" + OPT_NM;
 
        	        $('#td').append(option); 
+>>>>>>> refs/heads/SEBEEN
        	      }
         },
         error:function(){

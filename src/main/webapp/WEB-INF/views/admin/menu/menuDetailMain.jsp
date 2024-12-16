@@ -101,6 +101,297 @@ $(document).ready(function() {
         $("#popup_area").removeClass("hidden");
     });
     
+<<<<<<< HEAD
+    $("#btn_close").click(function() {
+        $("#popup_area").addClass("hidden");
+        
+        $('#tbody_opt_list').empty(); 
+    });
+    
+    // 삭제
+    $("#btn_del").click(function() {
+    	$("#delYn").val("Y");
+    	$("#frm_insert").attr('action', "<c:url value = '/admin/menu/menuInsert'/>");
+    	$("#frm_insert").attr('method', "post");
+    	
+    	$("#frm_insert").submit();
+    });
+    
+    // 신규등록 버튼
+    $("#btn_new").click(function() {
+        $("#optNo").val("");
+    	$("#optNm").val("");
+    	$("#optAmt").val("");
+    	
+    	var cnt = $("#tbody_opt_list").length;
+    	$("#optNo").val(cnt+1);
+    });
+    
+ // 옵션만 저장
+ $("#btn_save").click(function() {
+//  function fn_saveOpt(){debugger;
+ 	var optNo = $("#optNo").val();
+ 	var optNm = $("#optNm").val();
+ 	var optAmt = $("#optAmt").val();
+ 	var delYn = "N";
+ 	 
+ 	$.ajax({
+	         type: "POST" ,
+	         url: "/admin/menu/saveOpt.do",
+	         contentType: "application/x-www-form-urlencoded",
+	         data : { optNo : optNo, optNm : optNm, optAmt : optAmt , delYn : delYn}, 
+	         dataType: 'json',
+	         success: function (result) {
+	         	if(result > 0){
+	         		alert("옵션이 성공적으로 저장되었습니다.");
+	         	}  
+	         	fn_selectOptList();
+	         	
+	         	$("#optNo").val("");
+	         	$("#optNm").val("");
+	         	$("#optAmt").val("");
+	         },
+	         error:function(){
+	         	alert("옵션을 저장하지 못했습니다.");
+	         }
+     		});
+ 		});
+    
+});
+
+function fn_optSetting() {
+	$.ajax({
+        type: "POST" ,
+        url: "/admin/menu/selectOptList.do",
+        contentType: "application/json; charset=UTF-8",
+        dataType: 'json',
+        success: function (result) {
+            var option = "";
+            
+            var k = 1;
+            for(var i in result){
+       			var OPT_NO = result[i].OPT_NO;
+        	    var OPT_NM = result[i].OPT_NM;
+        	    
+        	    option = "<input type='checkbox' id='opt_0" + k + "' name='menuOpt' value='" + OPT_NO + "' />" + OPT_NM;
+
+       	        $('#td').append(option); 
+       	
+       			k++;
+       	      }
+            fn_checkedOpt();	// 체크하기
+        },
+        error:function(){
+        	alert("옵션을 불러오지 못했습니다.");
+        }
+    });
+}
+
+// 체크하기
+function fn_checkedOpt(){
+	var cnt = 1;
+	<c:forEach var="list" items="${list}" varStatus="status">
+		
+		if("${list.OPT_NO}" ==  $("#opt_0" + cnt).val()){
+			$("#opt_0" + cnt).prop('checked',true);
+		}
+		
+		cnt++;
+	</c:forEach>
+}
+
+// 기존 옵션 목록 가져오기
+function fn_selectOptList(){
+	$('#tbody_opt_list').empty(); 	// 테이블 내용 비우기
+	
+	$.ajax({
+        type: "POST" ,
+        url: "/admin/menu/selectOptList.do",
+        contentType: "application/json; charset=UTF-8",
+        dataType: 'json',
+        success: function (result) {
+            var option = "";
+            for(var i in result){
+       			var OPT_NO = result[i].OPT_NO;
+        	    var OPT_NM = result[i].OPT_NM;
+        	    var OPT_AMT = result[i].OPT_AMT;
+       			
+        	    option = "<tr>"
+        	    			+"<td>" + OPT_NO + "</td>"
+        	    			+"<td>" + OPT_NM + "</td>"
+        	    			+"<td>" + OPT_AMT + "</td>"
+        	    		+ "/<tr>"
+
+       	          $('#tbody_opt_list').append(option); 
+        	    		
+       	      }
+        },
+        error:function(){
+        	alert("옵션을 불러오지 못했습니다.");
+        }
+    });
+}
+
+
+//테이블의 행 클릭시 값 뿌리기
+ $(document).on("click", "#tbody_opt_list tr", function () {
+	 var td = $(this).children();
+	 
+	 var optNo = td.eq(0).text();    
+	 var optNm = td.eq(1).text();    
+	 var optAmt = td.eq(2).text();
+	 
+	 $("#optNo").val(optNo);
+	 $("#optNm").val(optNm);
+	 $("#optAmt").val(optAmt);
+ });
+
+</script>
+<title>예약하기</title>
+</head>
+<body>
+	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+	 <div id="container">
+  	<div class="contents">
+    <div class="inner">
+        <div>
+            <h3 style="font-size: 24px;">메뉴등록</h3>
+        </div>
+        <hr style="width: 990px;">
+<!--         <form id="frm_insert" onsubmit="return fn_validation()" enctype="multipart/form-data"> -->
+         <form id="frm_insert" enctype="multipart/form-data">
+         	<input type="hidden" name="menuNo" value="${map.MENU_NO}"/>
+         	<input type="hidden" id="delYn" name="delYn"/>
+            <table class=""
+                style="text-align: center; border: 1px solid #ddddddd">
+                <thead>
+                    <tr>
+                        <th colspan="3"><h4>메뉴등록</h4></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="width: 110px; height:350px;"><h5>메뉴이미지</h5></td>
+                        <td class="2">
+                            <div id="image_container" style="border : 1px solid black; width : 300px; height:300px; ">
+                            	<img src='${map.FILE_STOR_PATH}' style="width : 300px; height:300px; ">
+                            </div>
+                            <input style="margin-top:10px;" class="form-control form-control-user" type="file" name="menuImg" id="menuImg" onchange="setThumbnail(event);">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 110px;"><h5>메뉴명(한글)</h5></td>
+                        <td class="2">
+                            <input class="" id="menuKorNm" type="text" name="menuKorNm" maxlength="50" value="${map.MENU_KOR_NM}" placeholder="메뉴명을 입력하세요.">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 110px;"><h5>메뉴(영문명)</h5></td>
+                        <td class="2">
+                            <input class="" id="menuEngNm" type="text" name="menuEngNm" value="${map.MENU_ENG_NM}" maxlength="50" placeholder="메뉴명을 입력하세요.">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 110px;">
+                            <h5>카테고리</h5>
+                        </td>
+                        <td style="text-align: left;">
+                        	<select name="category" id="category" style="margin-left:65px;"> <!--  공통코드로 관리 -->
+                                <option value="01" <c:if test ="${map.CATEGORY eq 01}"> selected="selected"</c:if>>음료</option>
+                                <option value="02" <c:if test ="${map.CATEGORY eq 02}"> selected="selected"</c:if>>디저트</option>
+                                <option value="03" <c:if test ="${map.CATEGORY eq 03}"> selected="selected"</c:if>>MD</option>
+                                <option value="04" <c:if test ="${map.CATEGORY eq 04}"> selected="selected"</c:if>>기타</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 110px;"><h5>가격</h5></td>
+                        <td class="2">
+                            <input class="" id="origAmt" type="number" name="origAmt" value="${map.ORIG_AMT}" maxlength="20" placeholder="가격을 입력하세요.">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 110px;"><h5>판매가격</h5></td>
+                        <td class="2">
+                            <input class="" id="saleAmt" type="number" name="saleAmt" value="${map.SALE_AMT}" maxlength="20" placeholder="판매가격을 입력하세요.">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 110px;"><h5>메뉴설명</h5></td>
+                        <td class="2">
+                            <input class="" id="menuDtl" type="text" name="menuDtl" value="${map.MENU_DTL}" maxlength="20" placeholder="메뉴설명을 입력하세요.">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 110px;"><h5>옵션</h5><button class="btn_open" type="button">옵션관리</button></td>
+                        <td id="td">
+                        	<!-- 동적 영역 -->
+                        	
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <div>
+	        <button onclick="fn_save()">저장</button>
+	       	<button onclick="fn_gotoMain()">목록</button>
+      	</div>
+     <!-- 레이어팝업 영역 -->
+	 <div id="popup_area" class="modal hidden">
+		 <div class="bg">
+			<div class="modalBox qqq">
+			    <div class="allWrapper">
+			        <div>
+			        	<div class="exit_area">
+			        		<button id="btn_close">닫기</button>
+			        	</div>
+			            <h3>메뉴 옵션 관리</h3>
+			            <div class="optForm_body">
+			                <h4>옵션 목록</h4>
+			                <div class="optListArea"><!-- 목록 영역 start -->    	
+			                    <table id="table_opt" width="100%" class="table table-bordered table-hover text-center">
+								<thead>
+									<tr>
+										<th>옵션번호</th>
+										<th>옵션명</th>
+										<th>옵션가격</th>
+									</tr>
+								</thead>
+								<tbody id="tbody_opt_list">				
+									<!-- 동적생성영역 -->
+								</tbody>
+							</table>
+			                </div><!-- 목록 영역 end -->
+			                <div><button type="button" class="commBtn" id="btn_new">신규등록</button></div>
+			                <div class="optDtlArea"> <!-- 등록/수정 영역 -->
+			                	<table class="table table-bordered table-hover div_content_login"	style="text-align: center; border: 1px solid #ddddddd">
+								<thead>
+									<tr>
+										<th colspan="2"><h3>옵션</h3></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="width: 110px;">옵션번호</td>
+										<td><input class="form-control" type="text" id="optNo" name="optNo" readonly style="background-color: lightgray;"
+											maxlength="20"></td>
+									</tr>
+									<tr>
+										<td style="width: 110px;">옵션명</td>
+										<td><input class="form-control" type="text" id="optNm" 
+											name="optNm" maxlength="20"></td>
+									</tr>
+			                        <tr>
+										<td style="width: 110px;">옵션 가격</td>
+										<td><input class="form-control" type="number" id="optAmt"
+											name="optAmt" maxlength="20"></td>
+									</tr>
+								</tbody>
+							</table>
+			                </div>
+			                <div class="btnArea">
+			                    <button type="button" class="commBtn" id="btn_del">삭제</button>
+=======
     $("#btn_close, #btn_cancel").click(function() {
         $("#popup_area").addClass("hidden");
         
@@ -370,6 +661,7 @@ function fn_selectOptList(){
 			                </div>
 			                <div class="btnArea">
 			                    <button type="button" class="commBtn" id="btn_cancel">취소</button>
+>>>>>>> refs/heads/SEBEEN
 			                    <button type="button" id="btn_save" class="commBtn">저장</button>
 			                </div>
 			            </div>
