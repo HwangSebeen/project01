@@ -19,4 +19,6 @@ public interface AdminMenuService {
 
 	public List<Map<String, Object>> selectAdminMenuOptList(Map<String, Object> inputMap);
 
+	public int saveMenuOpt(Map<String, Object> param);
+
 }

@@ -119,6 +119,7 @@ $(document).ready(function() {
     
  // 옵션만 저장
  $("#btn_save").click(function() {
+
 //  function fn_saveOpt(){debugger;
  	var optNo = $("#optNo").val();
  	var optNm = $("#optNm").val();
@@ -145,7 +146,8 @@ $(document).ready(function() {
 	         	alert("옵션을 저장하지 못했습니다.");
 	         }
      		});
- 		});
+ 	});
+
     
 });
 
@@ -157,6 +159,18 @@ function fn_optSetting() {
         dataType: 'json',
         success: function (result) {
             var option = "";
+            $('#td').empty();
+            var k = 1;
+            for(var i in result){
+       			var OPT_NO = result[i].OPT_NO;
+        	    var OPT_NM = result[i].OPT_NM;
+        	    
+        	    option = "<input type='checkbox' id='opt_0" + k + "' name='menuOpt' value='" + OPT_NO + "' />" + OPT_NM;
+
+       	        $('#td').append(option); 
+       	
+       			k++;
+
             for(var i in result){
        			var OPT_NO = result[i].OPT_NO;
         	    var OPT_NM = result[i].OPT_NM;
@@ -164,12 +178,14 @@ function fn_optSetting() {
         	    option = "<input type='checkbox' name='menuOpt' value='" + OPT_NO + "' />" + OPT_NM;
 
        	        $('#td').append(option); 
+
        	      }
-        },
-        error:function(){
-        	alert("옵션을 불러오지 못했습니다.");
         }
-    });
+//         error:function(){
+//         	alert("옵션을 불러오지 못했습니다.");
+//         }
+    	}
+	});
 }
 
 // 기존 옵션 목록 가져오기

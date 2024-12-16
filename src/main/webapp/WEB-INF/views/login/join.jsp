@@ -10,6 +10,7 @@
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
   <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+  <script src="<%= request.getContextPath() %>/resources/js/common.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
@@ -64,40 +65,85 @@ a {
 	width: 170px; 
 	margin: 30px auto 0;
 }
+.modal {
+    position: fixed;
+     top: 0; 
+    left: 0; 
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
+}
+
+.modal .bg {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modalBox {
+    position: absolute;
+    background-color: #fff;
+    width: 300px;
+    height: 300px;
+    padding: 15px;
+    overflow: scroll;
+    top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+}
+
+.hidden {
+    display: none;
+}
+
+.optListArea {
+    width: 300px;
+}
+.allWrapper {
+    text-align: center;
+
+    display: flex;
+  justify-content: center;
+  align-items: center;
 </style>
 <script>
 	// 페이지 로드 시 지점 가져오기
 	$(document).ready(function(){
 		
-		fn_selectOfficeList();
+		// 사용자인지 지점관리자인지 유무 판단 후 관리지점 셀렉트박스 행 숨기기
+		// 모달띄우기
+		$("#popup_area").removeClass("hidden");
+		
+		// 관리지점자 선택했을때
+		$("#userAuthTyp_02").click(function() {
+			$("#userAuthTyp").val("02");
+	        $("#popup_area").addClass("hidden");
+	        $('#mngOffice').attr('style', "display:;");
+	        
+	        fn_selectOfficeList();
+	    });
+		
+		// 일반사용자 선택시
+		$("#userAuthTyp_03").click(function() {
+			$("#userAuthTyp").val("03");
+	        $("#popup_area").addClass("hidden");
+	        $('#mngOffice').attr('style', "display:none;");
+	    });
+		
+	   $("#btn_close").click(function() {
+		   alert("선택 후 회원가입 가능합니다.");
+	        
+	    });
+		
 	});
 	
 	// 관리지점목록 조회 ajax
-	function fn_selectOfficeList(){
-		$("#userOfficeNo").empty();
-		
-		$.ajax({
-            type: "POST" ,
-            url: "/login/selectOfficeList.do",
-            contentType: "application/json; charset=UTF-8",
-            dataType: 'json',
-            success: function (result) {
-            	
-                $("#userOfficeNo").append('<option value="">-선택-</option>');
-                var laborOption = "";
-                for(var k in result){
-           			var OFFICE_NO = result[k].OFFICE_NO;
-            	    var OFFICE_NM = result[k].OFFICE_NM;
-           			laborOption = '<option value="' + OFFICE_NO + '">' + OFFICE_NM + '</option>';
-           	
-           	          $('#userOfficeNo').append(laborOption); 
-           	      }
-            },
-            error:function(){
-            	alert("관리지점을 불러오지 못했습니다.");
-            }
-        });
-	}
+	$("#userOfficeNo").empty();
+	fn_selectOfficeList("userOfficeNo");
+
 	
 	// 저장 전 유효성체크
 	function fn_validation(){
@@ -213,6 +259,10 @@ a {
 </script>
 <title>회원가입</title>
 </head>
+<%
+	String userId = (String)session.getAttribute("userId");
+	String userNm = (String)session.getAttribute("userNm");
+%>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div id="container">
@@ -224,6 +274,7 @@ a {
 				</div>
 				<hr style="width: 700px; padding-right: 130px;">
 				<form method="post" id="frm_join" onsubmit="return fn_validation()" action="${ contextPath }/login/join">
+					<input type="hidden" name="userAuthTyp" id="userAuthTyp" value="">
 					<table class=""
 						style="text-align: center; border: 1px solid #ddddddd">
 						<thead>
@@ -297,7 +348,7 @@ a {
 									</div>
 								</td>
 							</tr>
-							<tr>
+							<tr id="mngOffice">
 								<td style="width: 110px;"><h5>관리 지점</h5></td>
 								<td>
 									<select name="userOfficeNo" id="userOfficeNo"></select>
@@ -336,6 +387,27 @@ a {
 			</div>
 		</div>
 	</div>
+	<!-- 사용자 체크 모달 start -->
+	<div>
+		<div id="popup_area" class="modal hidden">
+		 <div class="bg">
+			<div class="modalBox qqq">
+			    <div class="allWrapper">
+			        <div>
+			        	<div class="exit_area">
+			        		<button id="btn_close">닫기</button>
+			        	</div>
+			        	<h4>사용자 구분을 선택하여 주세요.</h4>
+				            <div><p>일반사용자 회원</p><span><input type="button" value="사용자" id="userAuthTyp_03"></span></div>
+				            <p>지점 관리용 회원</p><input type="button" value="지점관리자" id="userAuthTyp_02">
+			        </div>
+	    			</div>
+		      		
+		   		</div>
+	   		</div>
+   		</div>
+	</div>
+	<!-- 사용자 체크 모달 end -->
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>

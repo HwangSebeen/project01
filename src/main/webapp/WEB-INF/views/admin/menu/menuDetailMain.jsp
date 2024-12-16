@@ -101,10 +101,19 @@ $(document).ready(function() {
         $("#popup_area").removeClass("hidden");
     });
     
-    $("#btn_close, #btn_cancel").click(function() {
+    $("#btn_close").click(function() {
         $("#popup_area").addClass("hidden");
         
         $('#tbody_opt_list').empty(); 
+    });
+    
+    // 삭제
+    $("#btn_del").click(function() {
+    	$("#delYn").val("Y");
+    	$("#frm_insert").attr('action', "<c:url value = '/admin/menu/menuInsert'/>");
+    	$("#frm_insert").attr('method', "post");
+    	
+    	$("#frm_insert").submit();
     });
     
     // 신규등록 버튼
@@ -167,9 +176,9 @@ function fn_optSetting() {
 
        	        $('#td').append(option); 
        	
-       			fn_checkedOpt();
        			k++;
        	      }
+            fn_checkedOpt();	// 체크하기
         },
         error:function(){
         	alert("옵션을 불러오지 못했습니다.");
@@ -177,8 +186,17 @@ function fn_optSetting() {
     });
 }
 
+// 체크하기
 function fn_checkedOpt(){
-	
+	var cnt = 1;
+	<c:forEach var="list" items="${list}" varStatus="status">
+		
+		if("${list.OPT_NO}" ==  $("#opt_0" + cnt).val()){
+			$("#opt_0" + cnt).prop('checked',true);
+		}
+		
+		cnt++;
+	</c:forEach>
 }
 
 // 기존 옵션 목록 가져오기
@@ -205,7 +223,6 @@ function fn_selectOptList(){
 
        	          $('#tbody_opt_list').append(option); 
         	    		
-        	      fn_checkOpt();	// 체크하기
        	      }
         },
         error:function(){
@@ -213,6 +230,7 @@ function fn_selectOptList(){
         }
     });
 }
+
 
 //테이블의 행 클릭시 값 뿌리기
  $(document).on("click", "#tbody_opt_list tr", function () {
@@ -241,7 +259,8 @@ function fn_selectOptList(){
         <hr style="width: 990px;">
 <!--         <form id="frm_insert" onsubmit="return fn_validation()" enctype="multipart/form-data"> -->
          <form id="frm_insert" enctype="multipart/form-data">
-         	<input type="hidden" value="${map.MENU_NO}"/>
+         	<input type="hidden" name="menuNo" value="${map.MENU_NO}"/>
+         	<input type="hidden" id="delYn" name="delYn"/>
             <table class=""
                 style="text-align: center; border: 1px solid #ddddddd">
                 <thead>
@@ -306,6 +325,7 @@ function fn_selectOptList(){
                         <td style="width: 110px;"><h5>옵션</h5><button class="btn_open" type="button">옵션관리</button></td>
                         <td id="td">
                         	<!-- 동적 영역 -->
+                        	
                         </td>
                     </tr>
                 </tbody>
@@ -369,7 +389,7 @@ function fn_selectOptList(){
 							</table>
 			                </div>
 			                <div class="btnArea">
-			                    <button type="button" class="commBtn" id="btn_cancel">취소</button>
+			                    <button type="button" class="commBtn" id="btn_del">삭제</button>
 			                    <button type="button" id="btn_save" class="commBtn">저장</button>
 			                </div>
 			            </div>
