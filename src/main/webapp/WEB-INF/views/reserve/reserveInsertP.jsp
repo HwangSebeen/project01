@@ -161,6 +161,7 @@ if(replaceTime.length >= 4 && replaceTime.length < 5) {            // �
 	     time.value = hours + ":" + minute;      
 }
 }
+
 </script>
 <title>예약하기</title>
 </head>
@@ -187,6 +188,12 @@ if(replaceTime.length >= 4 && replaceTime.length < 5) {            // �
 											</td>
 										</tr>
 										<tr>
+											<td style="width: 110px;"><h5>예약 신청 일시</h5></td>
+											<td>
+												<input class="" type="date" id="resvDte" name="resvDte" >
+											</td>
+										</tr>
+										<tr>
 											<td style="width: 110px;"><h5>예약 날짜</h5></td>
 											<td>
 												시작일자 : <input class="" type="date" id="resvStDte" name="resvStDte" value=<%=resvStDte %>><br>
@@ -196,8 +203,11 @@ if(replaceTime.length >= 4 && replaceTime.length < 5) {            // �
 										<tr>
 											<td style="width: 110px;"><h5>예약 시간</h5></td> 
 											<td class="2">
+
 												시작시간 : <input class="" id="resvStDte" type="text" name="resvStDte" onKeyup="inputTimeColon(this);" placeholder="숫자만 4자리 입력(24시간제)">
 											<br>종료시간 : <input class="" id="resvEdDte" type="text" name="resvEdDte" onKeyup="inputTimeColon(this);" placeholder="숫자만 4자리 입력(24시간제)">
+
+
 											</td>
 										</tr>
 										<tr>
