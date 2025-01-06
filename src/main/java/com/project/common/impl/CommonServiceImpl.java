@@ -1,5 +1,6 @@
 package com.project.common.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ public class CommonServiceImpl implements CommonService{
 	@Override
 	public int insertFile(Map<String, Object> fileMap) {
 		return commonDao.insert("com.project.mapper.CommonMapper.insertFile", fileMap);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectCmnCdList(Map<String, Object> param) {
+		return commonDao.selectList("com.project.mapper.CommonMapper.selectCmnCdList", param);
 	}
 
 }

@@ -1,0 +1,30 @@
+/*
+COMMNET
+ 공통코드테이블에서 공통상세코드명을 가져온다.
+
+IN : 공통코드 agr1 / 공통상세코드 agr2
+OUT : 공통상세코드명 V_CMN_DTL_NM
+
+작성일자		작성자	COMMENT
+2024.12 	HSB 	최초작성
+
+*/
+
+CREATE OR REPLACE FUNCTION PROJECT2023_DEV.F_GET_CMN_CD_DTL_NM (agr1 VARCHAR2, agr2 VARCHAR2)
+    RETURN VARCHAR2
+IS
+    V_CMN_DTL_NM VARCHAR2(100);
+BEGIN
+	
+    SELECT 
+    	B.CMN_DTL_NM
+    INTO
+    	V_CMN_DTL_NM
+    FROM T_CMN_CD A
+		, T_CMN_CD_DTL B
+	WHERE A.CMN_CD = B.CMN_CD  
+	AND A.CMN_CD = agr1
+	AND B.CMN_DTL_CD = agr2;
+
+    RETURN V_CMN_DTL_NM;
+END;

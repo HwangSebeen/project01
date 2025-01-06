@@ -85,6 +85,8 @@ private static final Logger log = LoggerFactory.getLogger(ReserveController.clas
         	temp.put("RESV_ED_TIME", map.get("RESV_ED_TIME"));
         	temp.put("OFFICE_NO", map.get("OFFICE_NO"));
         	temp.put("RESV_PHONE_NUM", map.get("RESV_PHONE_NUM"));
+        	temp.put("RESV_STATUS", map.get("RESV_STATUS"));
+        	temp.put("DEL_YN", map.get("DEL_YN"));
         	
         	rslt.add(temp);
         }
@@ -105,18 +107,15 @@ private static final Logger log = LoggerFactory.getLogger(ReserveController.clas
 	
 	// 예약 저장
 	@RequestMapping(value = "/insertReserve", method = RequestMethod.POST)
-	public String insertReserve( @RequestParam Map<String,Object> param, Model model, RedirectAttributes rttr, HttpServletRequest request) throws IllegalStateException, IOException {
-		
+	public void insertReserve( @RequestParam Map<String,Object> param, Model model, HttpServletResponse response, RedirectAttributes rttr, HttpServletRequest request) throws IllegalStateException, IOException {
+
 		int result = reserveService.insertReserve(param);
 		
-		if(result > 0 ) {
-			model.addAttribute("msg","예약 신청 되었습니다.");
-		} else {
-			model.addAttribute("msg","예약 신청에 실패하였습니다.");
-		}
-			
-		model.addAttribute("url", "/reserve/reserveInsertMain");
-		return "/common/redirect";
+		PrintWriter pw = response.getWriter(); 
+		
+	    pw.print(result);
+        pw.flush();
+        pw.close();
 		
 	}
 }

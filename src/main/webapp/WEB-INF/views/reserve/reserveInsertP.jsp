@@ -133,7 +133,8 @@ a {
 	String RESV_ED_TIME = request.getParameter("RESV_ED_TIME");
 	String OFFICE_NO = request.getParameter("OFFICE_NO");
 	String RESV_PHONE_NUM = request.getParameter("RESV_PHONE_NUM");
-	
+	String RESV_STATUS = request.getParameter("RESV_STATUS");
+	String DEL_YN = request.getParameter("DEL_YN");
 %>
 <script>
 
@@ -161,11 +162,41 @@ a {
        	
        	          $('#userOfficeNo').append(laborOption); 
        	      }
-            
-    		$("select[name=userOfficeNo] option[value="+"<%=OFFICE_NO %>"+"]").prop("selected", true);
+            if("<%=RESV_NO %>" == '' || "<%=RESV_NO %>" == null){
+            } else {
+            	$("select[name=userOfficeNo] option[value="+"<%=OFFICE_NO %>"+"]").prop("selected", true);
+            }
         },
         error:function(){
         	alert("관리지점을 불러오지 못했습니다.");
+        }
+    });
+	
+	// 공통코드 예약상태 코드
+	$.ajax({
+        type: "POST" ,
+        url: "/common/selectCmnCdList",
+        contentType: "application/x-www-form-urlencoded",
+        data : { cmnCd : "08" },
+        dataType: 'json',
+        success: function (result) {
+        	
+            $("#resvStatus").append('<option value="">-선택-</option>');
+            var laborOption = "";
+            for(var k in result){
+       			var CMN_DTL_CD = result[k].CMN_DTL_CD;
+        	    var CMN_DTL_NM = result[k].CMN_DTL_NM;
+       			laborOption = '<option value="' + CMN_DTL_CD + '">' + CMN_DTL_NM + '</option>';
+       	
+       	          $('#resvStatus').append(laborOption); 
+       	      }
+            if("<%=RESV_NO %>" == '' || "<%=RESV_NO %>" == null){
+            } else {
+            	$("select[name=resvStatus] option[value="+"<%=RESV_STATUS %>"+"]").prop("selected", true);
+            }
+        },
+        error:function(){
+        	alert("예약상태를 불러오지 못했습니다.");
         }
     });
 	
@@ -175,7 +206,7 @@ a {
 	var day = ('0' + today.getDate()).slice(-2);
 	var todayString = year + '-' + month  + '-' + day;
 	
-	if("<%=OFFICE_NO %>" == '' || "<%=OFFICE_NO %>" == null){
+	if("<%=RESV_NO %>" == '' || "<%=RESV_NO %>" == null){
 		$("#resvDte").val(todayString);
 		$("#resvStDte").val("<%=resvStDte %>");
 		$("#resvEdDte").val("<%=resvEdDte %>");
@@ -195,6 +226,8 @@ a {
 		$("#resvTitle").val("<%=title %>");
 		$("#resvContent").val("<%=RESV_CONTENT %>");
 		$("#resvPhoneNum").val("<%=RESV_PHONE_NUM %>");
+		$("#resvStatus").val("<%=RESV_STATUS %>");
+		$("#delYn").val("<%=DEL_YN %>");
 		
 		$("#resvStTime, #resvEdTime").keyup();
 	}
@@ -221,14 +254,91 @@ a {
  	}
  });
 
+ /* =================================== */
+ $.fn.serializeObject = function() {
+    var o = {};
 
+    var a = this.serializeArray();
+
+    $.each(a, function() {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+ };
+ /* =================================== */
+ 
 // 저장
-function fn_save(){
-	$("#frm_resv").attr('action', "<c:url value = '/reserve/insertReserve'/>");
-	$("#frm_resv").attr('method', "post");
+function fn_save(e){ 
+	// 04 : 거절 / 02 : 예약완료
+	if("<%=RESV_STATUS %>" == "02" || "<%=RESV_STATUS %>" == "04"){
+		alert("예약완료 또는 예약거절 상태일 경우는 저장 및 수정을 하실 수 없습니다. 문의바랍니다.");
+		return;
+	}
 	
-	$("#frm_resv").submit();
+	var btnId = $(e).attr("id");
+
+	var stDte = $('#resvStDte').val().replaceAll('-','');
+	var edDte = $('#resvEdDte').val().replaceAll('-','');
+	var dte = $('#resvDte').val().replaceAll('-','');
+	
+	$('#stDte').val(stDte);
+	$('#edDte').val(edDte);
+	$('#dte').val(dte);
+	
+	var stTime = $('#resvStTime').val().replaceAll(':','');
+	var edTime = $('#resvEdTime').val().replaceAll(':','');
+	$('#resvStTime').val(stTime);
+	$('#resvEdTime').val(edTime);
+	
+	$('#delYn').val("N");
+	
+	if(btnId == "btn_save"){
+		$('#resvStatus').val("01");	// 예약신청완료
+	} else {
+		$('#resvStatus').val("03");	// 예약취소
+	}
+	
+// 	$("#frm_resv").attr('action', "<c:url value = '/reserve/insertReserve'/>");
+// 	$("#frm_resv").attr('method', "post");
+	
+// 	$("#frm_resv").submit();
+	
+	var data = $("#frm_resv").serializeObject();debugger;
+	//alert(data); //test
+
+	$.ajax({
+        type: "POST" ,
+        url: "/reserve/insertReserve",
+        contentType: "application/x-www-form-urlencoded",
+        data :data, 
+        dataType: 'json',
+        success: function (result) {
+        	if(result > 0){
+        		
+        		if(btnId == "btn_save"){
+	        		alert("성공적으로 신청되었습니다.");
+        		} else {
+        			alert("성공적으로 예약이 취소 되었습니다.");
+        		}
+        		window.close();
+        		
+        		opener.location.reload();
+        	} 
+        },
+        error:function(){
+        	alert("오류가 발생하였습니다.");
+        }
+	});
 }
+
+
 </script>
 <title>예약하기</title>
 </head>
@@ -245,20 +355,23 @@ function fn_save(){
 						<h3>예약 양식</h3>
 						<div class="optForm_body">
 							<form id="frm_resv">
-								<table class=""
-									style="text-align: center; border: 1px solid #ddddddd">
+								<table class="" style="text-align: center; border: 1px solid #ddddddd">
 									<tbody>
 										<tr>
 											<td style="width: 110px;"><h5>예약 신청 일시</h5></td>
 											<td>
-												<input class="" type="date" id="resvDte" name="resvDte" >
+												<input class="" type="date" id="resvDte" name="resvDte1" >
+												<input class="" id="delYn" type="hidden" name="delYn">
+												<input class="" id="dte" type="hidden" name="resvDte">
+												<input class="" id="stDte" type="hidden" name="resvStDte">
+												<input class="" id="ddDte" type="hidden" name="resvEdDte">
 											</td>
 										</tr>
 										<tr>
 											<td style="width: 110px;"><h5>예약 날짜</h5></td>
 											<td>
-												시작일자 : <input class="" type="date" id="resvStDte" name="resvStDte" value=<%=resvStDte %>><br>
-												종료일자 : <input class="" type="date" id="resvEdDte" name="resvEdDte" value=<%=resvEdDte %>>
+												시작일자 : <input class="" type="date" id="resvStDte" name="resvStDte1" value=<%=resvStDte %>><br>
+												종료일자 : <input class="" type="date" id="resvEdDte" name="resvEdDte1" value=<%=resvEdDte %>>
 											</td>
 										</tr>
 										<tr>
@@ -294,7 +407,7 @@ function fn_save(){
 												<h5>전화번호</h5>
 											</td>
 											<td style="text-align: left;">
-												<input type="text" id="resvPhoneNum" name="resvPhoneNum" placeholder="">
+												<input type="text" id="resvPhoneNum" name="resvPhoneNum" placeholder="숫자만입력하세요.(- 제외)">
 											</td>
 										</tr>
 										<tr>
@@ -304,8 +417,15 @@ function fn_save(){
 											</td>
 										</tr>
 										<tr>
+											<td style="width: 110px;"><h5>예약 상태</h5></td>
+											<td>
+												<select name="resvStatus" id="resvStatus" disabled></select>
+											</td>
+										</tr>
+										<tr>
 											<td style="text-align: left;" colspan="3"> 
-												 <button type="button" onclick="fn_save()" id="btn_save" class="commBtn">예약 신청하기</button>
+												 <button type="button" onclick="fn_save(this)" id="btn_save" class="commBtn">예약 신청하기</button>
+												 <button type="button" onclick="fn_save(this)" id="btn_cancel" class="commBtn">예약 취소하기</button>
 											</td>
 										</tr>
 									</tbody>

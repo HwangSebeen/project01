@@ -21,8 +21,68 @@
 			, DEL_YN
 			, FST_INS_DTE
 			, LST_MODIFY_DTE 
+			, RESV_STATUS
 		FROM T_RESERVE
 		 WHERE DEL_YN = 'N'
 		 AND USER_ID = #{userId}
 	</select>
+	
+	<insert id="insertReserve">
+		<selectKey resultType="string" keyProperty="resvNo" order="BEFORE">
+        	SELECT MAX(RESV_NO)+1 AS resvNo FROM T_RESERVE
+   	 	</selectKey>
+		MERGE INTO T_RESERVE
+			USING DUAL
+			   ON (RESV_NO = #{resvNo})
+			  WHEN MATCHED THEN
+			      UPDATE
+			         SET RESV_DTE = #{resvDte}
+			         , USER_ID = #{userId}
+			         , RESV_TITLE = #{resvTitle}
+			         , RESV_CONTENT = #{resvContent}
+			         , RESV_ST_DTE = #{resvStDte}
+			         , RESV_ST_TIME = #{resvStTime}
+			         , RESV_ED_DTE = #{resvEdDte}
+			         , RESV_ED_TIME = #{resvEdTime}
+			         , RESV_PHONE_NUM = #{resvPhoneNum}
+			         , OFFICE_NO = #{userOfficeNo}
+			         , DEL_YN = #{delYn}
+			         , FST_INS_DTE = SYSDATE
+			         , LST_MODIFY_DTE = SYSDATE
+			         , RESV_STATUS = #{resvStatus}
+			 WHEN NOT MATCHED THEN
+			      INSERT (
+	     			 RESV_NO
+					, RESV_DTE
+					, USER_ID
+					, RESV_TITLE
+					, RESV_CONTENT 
+					, RESV_ST_DTE
+					, RESV_ST_TIME
+					, RESV_ED_DTE
+					, RESV_ED_TIME
+					, RESV_PHONE_NUM
+					, OFFICE_NO
+					, DEL_YN
+					, FST_INS_DTE
+					, LST_MODIFY_DTE
+					, RESV_STATUS 
+				) VALUES (
+						  #{resvNo}
+						, #{resvDte}
+						, #{userId}
+						, #{resvTitle}
+						, #{resvContent}
+						, #{resvStDte}
+						, #{resvStTime}
+						, #{resvEdDte}
+						, #{resvEdTime}
+						, #{resvPhoneNum}
+						, #{userOfficeNo}
+						, #{delYn}
+						, SYSDATE
+						, SYSDATE
+						, #{resvStatus}
+					  )
+	</insert>
   </mapper>

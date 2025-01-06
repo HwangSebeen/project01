@@ -13,7 +13,7 @@ import com.project.reserve.service.ReserveService;
 public class ReserveServiceImpl implements ReserveService {
 
 	@Autowired
-	private CommonDao commonDao;
+	private CommonDao commonDao;  
 	
 	// 예약 리스트 조회
 	@Override

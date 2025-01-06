@@ -39,5 +39,19 @@
 				  )
 	</insert>
 	
+	<select id="selectCmnCdList" parameterType="java.util.Map" resultType="java.util.Map">
+	/* 공통코드 조회 - selectCmnCdList */
+		SELECT 
+			  A.CMN_CD 
+			, A.CMN_CD_NM 
+			, B.CMN_DTL_CD 
+			, B.CMN_DTL_NM 
+		 FROM T_CMN_CD A
+			, T_CMN_CD_DTL B
+		WHERE A.CMN_CD = B.CMN_CD
+		  AND A.CMN_CD = #{cmnCd}
+		  AND A.DEL_YN = 'N'
+		  AND B.DEL_YN = 'N'
+	</select>
 
   </mapper>
