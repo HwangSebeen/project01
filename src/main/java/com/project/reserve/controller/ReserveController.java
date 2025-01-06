@@ -55,7 +55,11 @@ private static final Logger log = LoggerFactory.getLogger(ReserveController.clas
 		log.info("예약하기 신청 진입");
 	}
 	
+<<<<<<< HEAD
 	@PostMapping("/selectReserveList")
+=======
+	@GetMapping("/selectReserveList")
+>>>>>>> branch 'SEBEEN' of https://github.com/HwangSebeen/project01.git
     @ResponseBody
     public void selectReserveList(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		HttpSession session = request.getSession();
