@@ -161,8 +161,10 @@ a {
        	
        	          $('#userOfficeNo').append(laborOption); 
        	      }
-            
-    		$("select[name=userOfficeNo] option[value="+"<%=OFFICE_NO %>"+"]").prop("selected", true);
+            if("<%=RESV_NO %>" == '' || "<%=RESV_NO %>" == null){
+            } else {
+            	$("select[name=userOfficeNo] option[value="+"<%=OFFICE_NO %>"+"]").prop("selected", true);
+            }
         },
         error:function(){
         	alert("관리지점을 불러오지 못했습니다.");
@@ -175,7 +177,7 @@ a {
 	var day = ('0' + today.getDate()).slice(-2);
 	var todayString = year + '-' + month  + '-' + day;
 	
-	if("<%=OFFICE_NO %>" == '' || "<%=OFFICE_NO %>" == null){
+	if("<%=RESV_NO %>" == '' || "<%=RESV_NO %>" == null){
 		$("#resvDte").val(todayString);
 		$("#resvStDte").val("<%=resvStDte %>");
 		$("#resvEdDte").val("<%=resvEdDte %>");
@@ -194,7 +196,7 @@ a {
 		$("#resvEdTime").val("<%=RESV_ED_TIME %>");
 		$("#resvTitle").val("<%=title %>");
 		$("#resvContent").val("<%=RESV_CONTENT %>");
-		$("#resvPhoneNum").val("<%=RESV_PHONE_NUM %>");
+		$("#resvPhoneNum").val("<%=RESV_PHONE_NUM %>");   
 		
 		$("#resvStTime, #resvEdTime").keyup();
 	}
@@ -221,13 +223,82 @@ a {
  	}
  });
 
+ /* =================================== */
+ $.fn.serializeObject = function()
 
+ {
+    var o = {};
+
+    var a = this.serializeArray();
+
+    $.each(a, function() {
+
+        if (o[this.name]) {
+
+            if (!o[this.name].push) {
+
+                o[this.name] = [o[this.name]];
+
+            }
+
+            o[this.name].push(this.value || '');
+
+        } else {
+
+            o[this.name] = this.value || '';
+
+        }
+
+    });
+
+    return o;
+
+ };
+ /* =================================== */
+ 
 // 저장
 function fn_save(){
-	$("#frm_resv").attr('action', "<c:url value = '/reserve/insertReserve'/>");
-	$("#frm_resv").attr('method', "post");
+	var stDte = $('#resvStDte').val().replaceAll('-','');
+	var edDte = $('#resvEdDte').val().replaceAll('-','');
+	var dte = $('#resvDte').val().replaceAll('-','');
 	
-	$("#frm_resv").submit();
+	$('#stDte').val(stDte);
+	$('#edDte').val(edDte);
+	$('#dte').val(dte);
+	
+	var stTime = $('#resvStTime').val().replaceAll(':','');
+	var edTime = $('#resvEdTime').val().replaceAll(':','');
+	$('#resvStTime').val(stTime);
+	$('#resvEdTime').val(edTime);
+	
+	$('#delYn').val("N");
+	
+// 	$("#frm_resv").attr('action', "<c:url value = '/reserve/insertReserve'/>");
+// 	$("#frm_resv").attr('method', "post");
+	
+// 	$("#frm_resv").submit();
+	
+	var data = $("#frm_resv").serializeObject();debugger;
+	//alert(data); //test
+
+	$.ajax({
+        type: "POST" ,
+        url: "/reserve/insertReserve",
+        contentType: "application/x-www-form-urlencoded",
+        data :data, 
+        dataType: 'json',
+        success: function (result) {
+        	if(result > 0){
+        		alert("성공적으로 신청되었습니다.");
+        		window.close();
+        		
+        		opener.location.reload();
+        	} 
+        },
+        error:function(){
+        	alert("오류가 발생하였습니다.");
+        }
+	});
 }
 </script>
 <title>예약하기</title>
@@ -245,20 +316,23 @@ function fn_save(){
 						<h3>예약 양식</h3>
 						<div class="optForm_body">
 							<form id="frm_resv">
-								<table class=""
-									style="text-align: center; border: 1px solid #ddddddd">
+								<table class="" style="text-align: center; border: 1px solid #ddddddd">
 									<tbody>
 										<tr>
 											<td style="width: 110px;"><h5>예약 신청 일시</h5></td>
 											<td>
-												<input class="" type="date" id="resvDte" name="resvDte" >
+												<input class="" type="date" id="resvDte" name="resvDte1" >
+												<input class="" id="delYn" type="hidden" name="delYn">
+												<input class="" id="dte" type="hidden" name="resvDte">
+												<input class="" id="stDte" type="hidden" name="resvStDte">
+												<input class="" id="ddDte" type="hidden" name="resvEdDte">
 											</td>
 										</tr>
 										<tr>
 											<td style="width: 110px;"><h5>예약 날짜</h5></td>
 											<td>
-												시작일자 : <input class="" type="date" id="resvStDte" name="resvStDte" value=<%=resvStDte %>><br>
-												종료일자 : <input class="" type="date" id="resvEdDte" name="resvEdDte" value=<%=resvEdDte %>>
+												시작일자 : <input class="" type="date" id="resvStDte" name="resvStDte1" value=<%=resvStDte %>><br>
+												종료일자 : <input class="" type="date" id="resvEdDte" name="resvEdDte1" value=<%=resvEdDte %>>
 											</td>
 										</tr>
 										<tr>
@@ -294,7 +368,7 @@ function fn_save(){
 												<h5>전화번호</h5>
 											</td>
 											<td style="text-align: left;">
-												<input type="text" id="resvPhoneNum" name="resvPhoneNum" placeholder="">
+												<input type="text" id="resvPhoneNum" name="resvPhoneNum" placeholder="숫자만입력하세요.(- 제외)">
 											</td>
 										</tr>
 										<tr>

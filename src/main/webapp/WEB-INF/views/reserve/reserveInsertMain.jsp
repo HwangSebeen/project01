@@ -172,173 +172,158 @@ $(document).ready(function(){
 
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
-
 		
 		$(function () {
-               var request = $.ajax({
-                   url: "/reserve/selectReserveList", // 변경하기
-                   method: "post",
-                   dataType: "json"
-           });
-		request.done(function (data) {
+        	var request = $.ajax({ url: "/reserve/selectReserveList", // 변경하기
+				                   method: "post",
+				                   dataType: "json"
+				           		});
+			request.done(function (data) {
 			
-			function fn_openPopup(info){
+				function fn_openPopup(info){
+					
+					var today = new Date();
+					var year = today.getFullYear();
+					var month = ('0' + (today.getMonth() + 1)).slice(-2);
+					var day = ('0' + today.getDate()).slice(-2);
+					var todayString = year + '-' + month  + '-' + day;
+					
+		 			if(info.dateStr < todayString || info.startStr < todayString || info.endStr < todayString){
+		 				alert(todayString + " 이전은 예약이 불가능합니다.");
+		 				return;
+		 			}
 				
-				var today = new Date();
-				var year = today.getFullYear();
-				var month = ('0' + (today.getMonth() + 1)).slice(-2);
-				var day = ('0' + today.getDate()).slice(-2);
-				var todayString = year + '-' + month  + '-' + day;
-				
-				if(info.startStr == data.start){
-				} else if(info.dateStr < todayString || info.startStr < todayString || info.endStr < todayString){
-					alert(todayString + " 이전은 예약이 불가능합니다.");
-					return;
+					var stDte = "";
+					
+					if(info.endStr == null){
+						stDte = info.dateStr
+					} else {
+						stDte = info.startStr;
+					}
+					var date = new Date(info.endStr);
+					
+					var year1 = date.getFullYear();
+					var month1 = ('0' + (date.getMonth() + 1)).slice(-2);
+					var day1 = ('0' + date.getDate()).slice(-2)-1;
+					
+					// 종료일자
+					$("#resvEdDte").val(year1 + "-" + month1 + "-" + day1);
+					// 시작일자
+					$("#resvStDte").val(stDte);
+					
+					$("#OFFICE_NO").val("");
+					$("#RESV_NO").val("");
+					$("#RESV_CONTENT").val("");
+					$("#RESV_DTE").val("");
+					$("#RESV_ED_TIME").val("");
+					$("#RESV_ST_TIME").val("");
+					$("#USER_ID").val("<%=userNm%>");
+					$("#RESV_PHONE_NUM").val("");
+					$("#title").val("");
+					$("#end").val("");
+					$("#start").val("");
+					
+					var url = "<%=request.getContextPath()%>/reserve/reserveInsertP";
+			        
+			        var wWidth =500; 
+				    var wHight = 500;
+				 
+				    var wX = (document.documentElement.clientWidth - wWidth) / 2;
+				    var wY = (document.documentElement.clientHeight - wHight) / 2;
+			        
+			        var option = "width=" +wWidth + ', height=' + wHight + ', top=' +wY+ ', left='+ wX + ", location = no";
+	
+					var windowTargetName = "targetName";
+					window.open(url, windowTargetName, option);
+					
+					// 2.POST로 데이터 전달
+					document.form1.action="/reserve/reserveInsertP"; // 이동
+					document.form1.target=windowTargetName;
+					$("#form1").submit();
 				}
-				
-//	 			if(info.dateStr < todayString || info.startStr < todayString || info.endStr < todayString){
-//	 				alert(todayString + " 이전은 예약이 불가능합니다.");
-//	 				return;
-//	 			}
 			
-				var stDte = "";
-				
-				if(info.endStr == null){
-					stDte = info.dateStr
-				} else {
-					stDte = info.startStr;
-				}
-				var date = new Date(info.endStr);
-				
-				var year1 = date.getFullYear();
-				var month1 = ('0' + (date.getMonth() + 1)).slice(-2);
-				var day1 = ('0' + date.getDate()).slice(-2)-1;
-				
-				// 종료일자
-				$("#resvEdDte").val(year1 + "-" + month1 + "-" + day1);
-				// 시작일자
-				$("#resvStDte").val(stDte);
-				
-				var url = "<%=request.getContextPath()%>/reserve/reserveInsertP";
-		        
-		        var wWidth =500; 
-			    var wHight = 500;
-			 
-			    var wX = (document.documentElement.clientWidth - wWidth) / 2;
-			    var wY = (document.documentElement.clientHeight - wHight) / 2;
-		        
-		        var option = "width=" +wWidth + ', height=' + wHight + ', top=' +wY+ ', left='+ wX + ", location = no";
-
-				var windowTargetName = "targetName";
-				window.open(url, windowTargetName, option);
-				
-				// 2.POST로 데이터 전달
-				document.form1.action="/reserve/reserveInsertP"; // 이동
-				document.form1.target=windowTargetName;
-				$("#form1").submit();
-			}
+				var calendarEl = document.getElementById('calendar');
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView : 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
+					headerToolbar : { // 헤더에 표시할 툴 바
+						start : 'prev next today',
+						center : 'title',
+						end : 'dayGridMonth,dayGridWeek,dayGridDay'
+					},
+					titleFormat : function(date) {
+						return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
+					},
+					selectable : true, // 달력 일자 드래그 설정가능
+					droppable : true,
+					editable : true,
+					nowIndicator: true, // 현재 시간 마크
+					locale: 'ko' // 한국어 설정
+					, dateClick: function(info) { //일자 셀 클릭 함수
+						var today = new Date();
+						var year = today.getFullYear();
+						var month = ('0' + (today.getMonth() + 1)).slice(-2);
+						var day = ('0' + today.getDate()).slice(-2);
+						var todayString = year + '-' + month  + '-' + day;
+						
+						if(info.dateStr < todayString || info.startStr < todayString || info.endStr < todayString){
+							return;
+						}
+						
+						fn_openPopup(info);
+					}
+					, select : function(info){	 // 드래그했을경우
+						var date = new Date(info.endStr);
+						
+						var year = date.getFullYear();
+						var month = ('0' + (date.getMonth() + 1)).slice(-2);
+						var day = ('0' + date.getDate()).slice(-2)-1;
+						
+						var rslt = year + '-' + month  + '-' + day;
+						
+						if(rslt == info.startStr){
+						} else {
+							fn_openPopup(info);
+							return;
+						}
+					}
+					, events: data
+					, eventClick:function(event) {	// 이벤트 클릭한 경우
+					 	var info = event.event;
+						
+						$("#OFFICE_NO").val(event.event._def.extendedProps.OFFICE_NO);
+						$("#RESV_NO").val(event.event._def.extendedProps.RESV_NO);
+						$("#RESV_CONTENT").val(event.event._def.extendedProps.RESV_CONTENT);
+						$("#RESV_DTE").val(event.event._def.extendedProps.RESV_DTE);
+						$("#RESV_ED_TIME").val(event.event._def.extendedProps.RESV_ED_TIME);
+						$("#RESV_ST_TIME").val(event.event._def.extendedProps.RESV_ST_TIME);
+						$("#USER_ID").val(event.event._def.extendedProps.USER_ID);
+						$("#RESV_PHONE_NUM").val(event.event._def.extendedProps.RESV_PHONE_NUM);
+						$("#title").val(event.event.title);
+						$("#end").val(event.event.endStr);
+						$("#start").val(event.event.startStr);
+						// 팝업 열기
+						var url = "<%=request.getContextPath()%>/reserve/reserveInsertP";
+				        
+				        var wWidth =500; 
+					    var wHight = 500;
+					 
+					    var wX = (document.documentElement.clientWidth - wWidth) / 2;
+					    var wY = (document.documentElement.clientHeight - wHight) / 2;
+				        
+				        var option = "width=" +wWidth + ', height=' + wHight + ', top=' +wY+ ', left='+ wX + ", location = no";
 			
-		var calendarEl = document.getElementById('calendar');
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-		initialView : 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
-		headerToolbar : { // 헤더에 표시할 툴 바
-			start : 'prev next today',
-			center : 'title',
-			end : 'dayGridMonth,dayGridWeek,dayGridDay'
-		},
-		titleFormat : function(date) {
-			return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
-		},
-		selectable : true, // 달력 일자 드래그 설정가능
-		droppable : true,
-		editable : true,
-		nowIndicator: true, // 현재 시간 마크
-		locale: 'ko' // 한국어 설정
-		
-		, dateClick: function(info) { //일자 셀 클릭 함수
-			var today = new Date();
-			var year = today.getFullYear();
-			var month = ('0' + (today.getMonth() + 1)).slice(-2);
-			var day = ('0' + today.getDate()).slice(-2);
-			var todayString = year + '-' + month  + '-' + day;
-			
-			if(info.startStr == data.start){
-				
-			} else {
-				return;
-			}
-// 			if(info.dateStr < todayString || info.startStr < todayString || info.endStr < todayString){
-// 				return;
-// 			}
-			
-			fn_openPopup(info);
-		}
-		, select : function(info){	 // 드래그했을경우
-			var date = new Date(info.endStr);
-			
-			var year = date.getFullYear();
-			var month = ('0' + (date.getMonth() + 1)).slice(-2);
-			var day = ('0' + date.getDate()).slice(-2)-1;
-			
-			var rslt = year + '-' + month  + '-' + day;
-			
-			if(rslt == info.startStr){
-			} else {
-				fn_openPopup(info);
-				return;
-			}
-		}
-// 		, events: [
-// 					     { title: 'Click for Google',
-// 					       start: '2024-12-28',
-// 					       end : '2024-12-31',
-// 					       RESV_NO : '1'
-// 					      }
-// 					     , { title: 'Click for Google',
-// 						       start: '2025-01-08',
-// 						       end : '2025-01-09',
-// 						       RESV_NO : '2'
-// 						      }
-// 					  ]
-			, events: data
-		 , eventClick:function(event) {	debugger;// 이벤트 클릭한 경우
-		 	var info = event.event;
-			alert(event.event);debugger;
-			$("#OFFICE_NO").val(event.event._def.extendedProps.OFFICE_NO);
-			$("#RESV_NO").val(event.event._def.extendedProps.RESV_NO);
-			$("#RESV_CONTENT").val(event.event._def.extendedProps.RESV_CONTENT);
-			$("#RESV_DTE").val(event.event._def.extendedProps.RESV_DTE);
-			$("#RESV_ED_TIME").val(event.event._def.extendedProps.RESV_ED_TIME);
-			$("#RESV_ST_TIME").val(event.event._def.extendedProps.RESV_ST_TIME);
-			$("#USER_ID").val(event.event._def.extendedProps.USER_ID);
-			$("#RESV_PHONE_NUM").val(event.event._def.extendedProps.RESV_PHONE_NUM);
-			$("#title").val(event.event.title);
-			$("#end").val(event.event.endStr);
-			$("#start").val(event.event.startStr);
-			// 팝업 열기
-			var url = "<%=request.getContextPath()%>/reserve/reserveInsertP";
-	        
-	        var wWidth =500; 
-		    var wHight = 500;
-		 
-		    var wX = (document.documentElement.clientWidth - wWidth) / 2;
-		    var wY = (document.documentElement.clientHeight - wHight) / 2;
-	        
-	        var option = "width=" +wWidth + ', height=' + wHight + ', top=' +wY+ ', left='+ wX + ", location = no";
-
-			var windowTargetName = "targetName";
-			window.open(url, windowTargetName, option);
-			
-			// 2.POST로 데이터 전달
-			document.form1.action="/reserve/reserveInsertP"; // 이동
-			document.form1.target=windowTargetName;
-			$("#form1").submit();
-			
-		 }
+						var windowTargetName = "targetName";
+						window.open(url, windowTargetName, option);
+						
+						// 2.POST로 데이터 전달
+						document.form1.action="/reserve/reserveInsertP"; // 이동
+						document.form1.target=windowTargetName;
+						$("#form1").submit();
+					 }
+				});
+			calendar.render();
 			});
-		calendar.render();
-	});
-});
+		});
 	});
 </script>
 </html>
