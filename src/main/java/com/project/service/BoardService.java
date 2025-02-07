@@ -18,6 +18,8 @@ public interface BoardService {
 	public List<Map<String, Object>> selectBoardList(Map<String, Object> param);
 	/* 게시판 게시글 조회 */
 	public Map<String, Object> selectDetail(Map<String, Object> param);
+	
+	public int boardEnrollTest(BoardVO board);
 
 	
 //	/* 게시판 목록 */

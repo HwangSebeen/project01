@@ -12,6 +12,9 @@ public interface BoardMapper {
 	// 게시판 등록
 	public int boardEnroll(Map<String,Object> map);
 	
+	// 게시판 등록 Test
+	public int boardEnrollTest(BoardVO board);
+	
 	// 게시판번호 채번
 	public Map<String,Object> selectNewBbsNo(Map<String,Object> map);
 	

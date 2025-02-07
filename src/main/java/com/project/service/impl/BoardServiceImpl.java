@@ -30,6 +30,16 @@ public class BoardServiceImpl implements BoardService {
 		commonDao.insert("com.project.mapper.BoardMapper.enroll", board);
 		
 	}
+	
+	/* 게시판 등록 */
+	@Override
+	public int boardEnrollTest(BoardVO board) {
+		
+//		mapper.enroll(board);
+		
+		return commonDao.insert("com.project.mapper.BoardMapper.boardEnrollTest", board);
+		
+	}
 
 	// 게시판 등록
 	@Override
